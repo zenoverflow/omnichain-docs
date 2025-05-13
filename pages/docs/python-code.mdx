@@ -1,0 +1,50 @@
+## Add custom functionality via Python code
+
+This is a feature of the external Python module (see [Setup](/docs/setup#external-python-module-optional)). It allows you to write custom functions in Python, expose them via FastAPI, and call them from the special ExtCallPythonModule node in OmniChain.
+
+To create a custom function, you need to:
+
+-   Add a new folder inside the `custom_modules` folder in the root of the project of the external Python module
+
+-   Add an `__init__.py` file inside the new folder
+
+-   Expose a `setup` function to receive the main FastAPI app and add your custom functions to it
+
+## Example
+
+This is a basic example of the `__init__.py` file. A similar example is available for copy-pasting in the `custom_modules` folder of the external Python module. To understand this example, you should familiarize yourself with the [FastAPI](https://fastapi.tiangolo.com/) and [Pydantic](https://docs.pydantic.dev/latest/) libraries.
+
+Feel free to add more files inside your module(s) and also to install and import any dependencies you need. Just make sure you don't cause conflicts that break the base project.
+
+```python
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+
+class ExampleModel(BaseModel):
+    """
+    An example model for the example module.
+    """
+
+    custom_parameter: str | None
+
+
+def setup(app: FastAPI):
+    """
+    The setup function for the example module.
+    """
+
+    def echo(data: ExampleModel | None = None):
+        """
+        A simple route that echoes back the custom parameter.
+        """
+
+        custom_parameter = data.custom_parameter if data else None
+
+        return {"message": custom_parameter if custom_parameter else "Hello there!"}
+
+    # Add the hello route to the app
+    app.post("/example/echo")(echo)
+```
+
+Note: Do not delete or rename the example in the project or it will cause conflicts with git.

@@ -1,0 +1,314 @@
+import { ColoredDot } from "../../components/ColoredDot";
+
+OmniChain is built to be easily extensible, so you can create custom nodes for your chains by simply dropping a script file inside the `custom_nodes` folder of your project, or a subfolder if you want to create something more complex that requires bundling.
+
+The requirements are simply that the file:
+
+-   is either in the `custom_nodes` folder or a direct subfolder inside it.
+-   is a pure JavaScript file, ending in `.maker.js`
+-   has its code wrapped in an IIFE (Immediately Invoked Function Expression) that returns an object built using `global.__ocMakeNode()`.
+
+The function has a high degree of automatic validation to keep you from making mistakes, but you should always check the logs for any errors once you run the project with your new node in place.
+
+Remember, you don't necessarily have to write the file in pure JS manually, especially if you're building something really complex. You can always use a bundler like Webpack or Rollup to create the final file, as long as its contents follow the requirements above.
+
+## Quick-start example
+
+To get you started more easily, we've created a simple example of a custom node that you can use as a template for your own creations. You can find it in the `custom_nodes/example` folder of your project. Just copy-paste the folder with a different name and start editing the `example.maker.js` file inside it. (Don't modify the original example, or you will have problems with git when updating OmniChain!)
+
+## Custom node API
+
+Nodes in OmniChain consist of 3 configuration objects:
+
+-   The base config
+-   The IO config (inputs, outputs, controls, and optionally overrides)
+-   The flow config (the actual code that runs)
+
+### Base config
+
+The base configuration looks like this:
+
+```javascript
+{
+    nodeName: "MyExampleNode",
+    nodeIcon: "FileTextOutlined",
+    dimensions: [580, 670],
+    doc: "Whatever this node does.",
+}
+```
+
+Parameters:
+
+-   `nodeName`: The name of the node. This is what will be displayed in the node's title, but also the node's unique identifier. It should be unique across all nodes in your project. The name should consist of only letters and numbers, and end with "Node". You will notice that the last part is always stripped out from the display title in the editor.
+-   `nodeIcon`: The icon to be displayed in the node. You can use any icon from the Ant Design icon library. Just copy the name of the icon from the [Ant Design Icons](https://ant.design/components/icon/) page and paste it here.
+-   `dimensions`: The dimensions of the node in the editor. The first number is the width, and the second is the height.
+-   `doc`: A brief description of what the node does. This will be displayed in the node's documentation popup, as well as in the node index.
+
+### IO config
+
+The IO configuration looks like this:
+
+```javascript
+{
+    inputs: [
+        { name: "triggerIn", type: "trigger", label: "trigger in" },
+        {
+            name: "triggerClear",
+            type: "trigger",
+            label: "trigger clear",
+        },
+        { name: "dataIn", type: "string", label: "data in" },
+    ],
+    outputs: [
+        {
+            name: "triggerOut",
+            type: "trigger",
+            label: "trigger got data",
+        },
+        {
+            name: "triggerCleared",
+            type: "trigger",
+            label: "trigger cleared",
+        },
+        { name: "dataOut", type: "string", label: "data out" },
+    ],
+    controlsOverride: {
+        val: "val",
+    },
+    controls: [
+        {
+            name: "val",
+            control: {
+                type: "text",
+                defaultValue: "{}",
+                config: { large: true },
+            },
+        },
+    ],
+}
+```
+
+It consists of 3 arrays and an optional map:
+
+-   `inputs`: The inputs of the node.
+-   `outputs`: The outputs of the node.
+-   `controls`: The controls of the node.
+-   `controlsOverride` (optional): control override map
+
+#### Inputs and outputs
+
+Both inputs and outputs have the same parameters:
+
+-   `name`: The name of the input/output. This is what you will use to refer to it in the flow code. Must not be named 'error' - that's a reserved name!
+-   `type`: The type of the input/output. This can be one of the following:
+    -   `trigger` <ColoredDot color="#f5222d" /> used to control the flow of the chain
+    -   `string` <ColoredDot color="#52c41a" /> used to pass text data
+    -   `stringArray` <ColoredDot color="#2f54eb" /> used to pass arrays of text data
+    -   `file` <ColoredDot color="#fadb14" /> used to pass file data
+    -   `fileArray` <ColoredDot color="#faad14" /> used to pass arrays of file data
+    -   `chatMessage` <ColoredDot color="#d3adf7" /> used to pass chat messages
+    -   `chatMessageArray` <ColoredDot color="#722ed1" /> used to pass arrays of chat
+        messages
+    -   `slot` <ColoredDot color="#13c2c2" /> used to pass string values labeled with
+        a key
+-   `label`: The label of the input/output. This is what will be displayed in the editor. If no label is probably provided, the name will be used instead.
+-   `multi` (optional): If set to true, allows the input/output to accept multiple connections. This is allowed on all types except `trigger` outputs.
+
+##### Multi defaults
+
+-   `trigger` inputs: true
+-   `trigger` outputs: false (cannot be true)
+-   other inputs: false
+-   other outputs: true
+
+#### Controls
+
+Control parameters vary depending on the type of control. The only types of controls are:
+
+-   `text`: for text inputs
+-   `number`: for number inputs
+-   `select`: for selection one of a set of predefined options (stored as strings)
+
+The parameters that are the same for all control types are the following:
+
+-   `name`: The name of the control. This is what you will use to refer to it in the flow code.
+-   `control`: The control object. This object has the following parameters:
+    -   `type`: The type of the control. This can be one of the following:
+        -   `text`: for text inputs
+        -   `number`: for number inputs
+        -   `select`: for selection one of a set of predefined options
+    -   `defaultValue`: The default value of the control. Must be the proper type for the control, or `null`.
+    -   `config`: Additional configuration for the control. This varies accordingly.
+
+#### Controls override
+
+The `controlsOverride` object is optional and is used to map descriptive keys to actual control names. Adding it automatically causes an `override` string input to be added to the node. The keys define the properties used to pass in a value using the JSON string consumed via the `override` input. The values are the names of the controls that will be updated with the property values. The convention for override key naming is `snake_case`. Override keys will automatically show up in the node's documentation.
+
+##### Text control config
+
+-   `label` (optional): change the label for the control. The default is 'Text'.
+-   `large` (optional): If set to true, the control will be displayed as a large text box. This is useful for multiline text inputs. Defaults to false. Large mode will also enable a button to open a larger editor in a modal.
+-   `modalSyntaxHighlight` (optional): One of `"json" | "markdown" | "javascript"`. If set, the modal editor will use syntax highlighting and some basic completion for the selected language.
+
+##### Number control config
+
+-   `label` (optional): change the label for the control. The default is nothing.
+-   `min` (optional): The minimum value allowed.
+-   `max` (optional): The maximum value allowed.
+
+##### Select control config
+
+-   `label` (optional): change the label for the control. The default is 'Option'.
+-   `showSearch` (optional): If set to true, a search box will be displayed in the select dropdown. Defaults to false.
+-   `values`: An array of objects with the following parameters:
+    -   `value`: The value of the option. This is what will be stored in the control.
+    -   `label`: The label of the option. This is what will be displayed in the select dropdown.
+
+### Flow config
+
+The flow config object can contain one or both of the following functions:
+
+-   `controlFlow`: This function is called when the node is triggered by a trigger input. It should return the name of the output trigger to be called, or `null`.
+-   `dataFlow`: This function is called when another node requests data from this node. It should return an object with keys matching the names of all defined outputs.
+
+Here is an example of a flow config object for a hybrid node (both `controlFlow` and `dataFlow` are present):
+
+```javascript
+{
+    async controlFlow(nodeId, context, trigger) {
+        try {
+            if (trigger === "triggerClear") {
+                await context.updateControl(nodeId, "val", "{}");
+                return "triggerCleared";
+            }
+
+            const inputs = await context.fetchInputs(nodeId);
+
+            const oldValue = context.getAllControls(nodeId).val;
+            const update = (inputs.dataIn || [])[0] || oldValue;
+
+            // Update graph if necessary
+            if (update !== oldValue) {
+                await context.updateControl(nodeId, "val", update);
+            }
+
+            return "triggerOut";
+        } catch (error) {
+            console.error("--ERROR--\n", error);
+            return "error";
+        }
+    },
+    async dataFlow(nodeId, context) {
+        return {
+            dataOut: context.getAllControls(nodeId).val,
+        };
+    },
+}
+```
+
+Note that if you define the `controlFlow` function, your node will always get a trigger output named 'error' that you can return from a catch block in your code to signal an error to the rest of the logic in your chain and route the flow accordingly.
+
+Both functions receive the following parameters:
+
+-   `nodeId: string`: The unique identifier of the node.
+-   `context: object`: The execution context of the node. It contains a bunch of useful properties and functions
+    -   `graphId: string`: The unique identifier of the graph.
+    -   `getGraph() => SerializedGraph`: A function that returns the graph object.
+    -   `instanceId: string`: The unique identifier of the execution instance.
+    -   `fetchInputs(nodeId) => Promise<Record<string, any[]>>`: A function that returns an object with keys matching the names of all defined inputs, and values being arrays of the data received from the connected nodes. The values are arrays because inputs support multiple connections.
+    -   `updateControl(node, control, value) => Promise`: A function that updates the value of a control. The `node` parameter is the unique identifier of the node, the `control` parameter is the name of the control, and the `value` parameter is the new value.
+    -   `getAllControls(nodeId) => Record<string, any>`: A function that returns an object with keys matching the names of all defined controls, and values being the current values of the controls. Use if you don't enable overrides.
+    -   `getControlsWithOverride(nodeId, inputs) => Promise<Record<string, any>>`: Similar to `getAllControls` but async because it applies overrides from the inputs.
+    -   `getApiKeyByName(name) => string`: A function that returns the value of an API key by its name. Returns `null` if the key is not found.
+    -   `getFlowActive() => boolean`: A function that returns whether the flow is currently active. Useful for letting your logic know if the chain has been stopped, in order to avoid unnecessary processing.
+    -   `extraAction(action) => Promise<any>`: A special function that concerns some internals of the executor engine. Read more about it below.
+
+The `controlFlow` function also receives the following additional parameter:
+
+-   `trigger`: The name of the trigger that caused the node to be called.
+
+#### Extra actions (CAUTION)
+
+These are triggered by calling the `extraAction` function in the context object. They do some special stuff with the execution engine, and are not meant to be used by third-party code, but they are still exposed in case your have a use case that really needs them.
+
+The action parameter is an object with the following properties:
+
+-   `type`: The type of the action.
+-   `args` (optional): An object with specific arguments for some actions.
+
+The available actions are:
+
+-   `chatBlock` (`args: { "blocked": boolean }`): Blocks or unblocks the chat for the current execution instance.
+-   `checkQueue` (`args: never`): Returns all unprocessed chat messages waiting on the executor's queue.
+-   `readSessionMessages` (`args: never`): Returns all chat messages from the current execution session.
+-   `clearSession` (`args: never`): Empties the current execution session of all chat messages.
+-   `grabNextMessage` (`args: never`): Grabs the next chat message from the executor's queue, and saves it to a variable in the engine.
+-   `readCurrentMessage` (`args: never`): Returns the last chat message saved in the engine by `grabNextMessage()`. May be empty if no message was grabbed.
+-   `addMessageToSession` (`args: { "message": ChatMessage }`): Adds a ChatMessage object to the current execution session.
+-   `saveGraph` (`args: never`): Saves the current graph to the disk.
+-   `mkChatStore` (`args: never`): Creates a new chat store in the current execution session and returns its ID.
+-   `getChatStore` (`args: { "id": string }`): Returns the chat store with the given ID. The chat store is a list of ChatMessage objects.
+-   `rmChatStore` (`args: { "id": string }`): Removes the chat store with the given ID.
+-   `addMessageToChatStore` (`args: { "id": string, "message": ChatMessage }`): Adds a ChatMessage object to the chat store with the given ID.
+-   `callExternalModule` (`args: { "module": string, "action": string, "data": Record<string, any> }`): Calls a function from an external module. At the moment, this is used only for the Python module.
+
+## Notable data types
+
+The TypeScript definitions for some data types used in the engine are listed below for reference. Note that these are subject to change and it's best to refer to the actual code for the most up-to-date information. The listing here is just to save you some time.
+
+### ChatMessage
+
+```typescript
+type ChatMessage = {
+    messageId: string;
+    chainId: string;
+    from?: string | null;
+    role: "user" | "assistant";
+    content: string;
+    created: number;
+    files: ChatMessageFile[];
+};
+```
+
+### ChatMessageFile
+
+```typescript
+type ChatMessageFile = {
+    name: string;
+    mimetype: string;
+    content: string;
+};
+```
+
+### SerializedGraph
+
+```typescript
+type SerializedGraph = {
+    name: string;
+    graphId: string;
+    nodes: SerializedNode[];
+    connections: {
+        source: string;
+        sourceOutput: string;
+        target: string;
+        targetInput: string;
+    }[];
+    zoom: number;
+    areaX: number;
+    areaY: number;
+    created: number;
+    execPersistence: "onChange" | "onDemand";
+};
+```
+
+### SerializedNode
+
+```typescript
+type SerializedNode = {
+    nodeType: string;
+    nodeId: string;
+    controls: Record<string, string | number | null>;
+    positionX: number;
+    positionY: number;
+};
+```

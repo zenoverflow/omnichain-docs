@@ -1,0 +1,52 @@
+The flow of chains in OmniChain is centered around controlflow and hybrid nodes. These nodes have trigger inputs and outputs, which allow them to pass control from one to the other. Nodes with multiple trigger outputs can be used to create complex decision trees.
+
+Pure dataflow nodes are secondary, and are called to action by controlflow and hybrid nodes. They are executed in a traditional dataflow manner, where each node requests data from previous nodes via its inputs connections.
+
+The chains themselves run on the backend, independently of the frontend, and can be used either via the chat view in OmniChain itself, or via the OpenAI-compatible API endpoints.
+
+Because the execution happens on the backend, you can close the frontend's browser tab at any time, and the chains will continue to run and do whatever they are configured to do, until you decide to stop them, or a critical error occurs (normal logic errors are handled by the controlflow and hybrid nodes themselves, and trigger the error output of the node without stopping the chain, more on that below).
+
+## Entrypoint
+
+When the run button in the editor is pressed, and the chain is loaded for execution into the backend, the chain's entrypoint is called. The entrypoint is always defined by the Start node, which is a simple controlflow node, which has a trigger output to pass control onto whatever node you want to run next, but also a trigger input in order to facilitate looping and long-running chains.
+
+![Start node](/images/s_node_start.png)
+
+## Chat interaction
+
+You can use the CheckForNextMessage node to check for new messages in the chat. The way this node works is - it checks for new messages (messages have unique IDs under the hood) and if one is found, it's put in a special spot in the executor's engine, so that other nodes can then read the message multiple times, until your logic is done with it. When your logic triggers the CheckForNextMessage node again, it will check for the next message, and so on. Note that the CheckForNextMessage node does not have to wait around for a message to appear. You choose whether to connect the 'no' trigger back to the node, or to another node that does something else in the background before your logic decides to check for the next message again.
+
+![CheckForNextMessage node](/images/s_node_checkfornextmessage.png)
+
+While your chain is doing something with the message, you may want to block the user's ability to send new messages. This is why the BlockChat node exists. It can be used to either block or unblock the chat.
+
+![BlockChat node](/images/s_node_blockchat.png)
+
+When you want your chain to respond to the user, you can use the Response node, which accepts a `chatMessage` input, and sends the response to the executor chat session, which is basically the chat log that you see in the chat view.
+
+![Response node](/images/s_node_response.png)
+
+## Chat sessions
+
+Chat sessions are ephemeral, and are not stored on the chain. They exist only as long as the chain is running. There are actually two types of sessions in OmniChain:
+
+-   The executor's main chat session (the one we mentioned above). This is where messages from the user are stored, and this is also where messages from the chain are sent to be read by the user.
+-   Chat stores. These are special chat sessions that are created by the chain itself, and are used to store messages that the chain wants to remember for later. The chain can create as many chat stores as it wants, and can read from them at any time. Chat stores are created and manipulated by the ChatStore nodes.
+
+Just because the chat sessions themselves are ephemeral, doesn't mean that you can't save their content. Basically, you can always grab and store their content via other nodes like the GrabText node, if that's what you need.
+
+## Error handling
+
+When an error occurs in your logic, the chain doesn't need to stop execution. The error is usually caught by the controlflow or hybrid node that triggered it, and the error output of that node is activated. This allows you to recover from errors and continue the chain's execution. You can see a simple use case for this in the example chains, where the error outputs are used to send a generic error response to the user, telling them something went wrong, but still allowing them to send another message and continue the conversation.
+
+![Error handling](/images/s_flow_error.png)
+
+If a critical error occurs in the engine itself, then the chain will stop, and you will see an error in the console as usual. However, this does not mean that the app itself is down. You can still run other chains, and the engine will continue to work as expected if everything is fine. Note that if you see such an error, you should determine if it originates from the engine itself, or was caused by a custom node in your chain. If it's the former, then you should open an issue on the GitHub repository, so that the problem can be fixed. If it's the latter, then you should try to fix the problem in your custom node, or ask the developer of the custom node if it comes from a third-party source.
+
+## Execution stopping
+
+The execution of a chain stops in the following cases:
+
+-   The stop button in the editor is pressed.
+-   Execution of a different chain is requested via the API.
+-   Critical errors, as mentioned above.

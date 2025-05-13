@@ -1,0 +1,81 @@
+import Link from "next/link";
+
+import { IntroFeature } from "../components/IntroFeature.jsx";
+
+# OmniChain
+
+## Efficient visual programming for AI language models
+
+![Screenshot](/images/screenshot.png)
+
+<div
+    style={{
+        display: "grid",
+        gridGap: "1rem",
+        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+        margin: "1rem 0",
+    }}
+>
+    <IntroFeature iconName="AimOutlined">
+        Use language models as focused processing components rather than
+        overburdened pseudo-humans.
+    </IntroFeature>
+    <IntroFeature iconName="PartitionOutlined">
+        Guide language models along predefined logic of your own design,
+        drastically improving performance and cost-efficiency.
+    </IntroFeature>
+    <IntroFeature iconName="ApiOutlined">
+        Use other software and frameworks from OmniChain via HTTP requests and
+        system commands. Use OmniChain from other software via its own HTTP API.
+    </IntroFeature>
+    <IntroFeature iconName="GlobalOutlined">
+        Access the underlying operating system to read/write files and run
+        commands, or access external services via HTTP requests, turning your
+        workflows into powerful integrations.
+    </IntroFeature>
+    <IntroFeature iconName="SyncOutlined">
+        Build workflows that can loop and run 24/7, with the ability to pause
+        for user input, and resume when ready.
+    </IntroFeature>
+    <IntroFeature iconName="CodeOutlined">
+        Easily make custom nodes, use JS eval nodes to run custom code, and
+        optionally have the AI generate the code for you.
+    </IntroFeature>
+    <IntroFeature iconName="SaveOutlined">
+        Use the chain's self-modification capabilities to store and reuse data
+        at any point in the chain, and export the chain with the data included.
+    </IntroFeature>
+    <IntroFeature iconName="SafetyOutlined">
+        Private, self-hosted, fully open-source, and available for commercial
+        use via the non-restrictive MIT license.
+    </IntroFeature>
+</div>
+
+<div
+    style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    }}
+>
+    <Link href="/docs/quick-start-guide">
+        <div
+            style={{
+                display: "inline-block",
+                padding: "0.5rem 1rem",
+                backgroundColor: "#0070f3",
+                color: "white",
+                borderRadius: "5px",
+                textDecoration: "none",
+                fontSize: "1.25rem",
+                fontWeight: "bold",
+                marginTop: "1rem",
+                marginBottom: "1rem",
+                cursor: "pointer",
+            }}
+        >
+            {"Get Started >>"}
+        </div>
+    </Link>
+</div>

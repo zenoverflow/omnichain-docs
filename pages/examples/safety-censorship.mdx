@@ -1,0 +1,49 @@
+import { DownloadExampleButton } from "../../components/DownloadExampleButton";
+
+## Build a robust jailbreak-resistant business chatbot
+
+This is an example of a chatbot working for a fictional company named HealthUP.
+
+Its task (Assigned Topic) is to talk about healthy diets and food supplements.
+
+The example is meant to show you how a chatbot can be made resistant to both jailbreaking attempts and attempts to talk about anything unrelated to the Assigned Topic.
+
+OmniChain's portals and modules features are used to implement a cleaner logic chain.
+
+This chain is also a good introduction to the concept of binary decision trees in OmniChain.
+
+Note: Configured to use Ollama with the `llama3.1:8b-instruct-q8_0` model.
+
+![Screenshot](/examples/Safety_Censorship.png)
+
+<DownloadExampleButton
+    title="Download"
+    fileUrl="/examples/Safety_Censorship.json"
+    fileName="Safety_Censorship.json"
+/>
+
+## Explanation
+
+### Modules
+
+-   Main system message - basic data for the company and the chatbot (top left)
+-   Response module - sends a response (under the system message)
+-   Decision generation module - generates a single-token decision (bottom left)
+-   Response generation module - generates a response (bottom right)
+-   Main logic chain (center)
+
+### Logic
+
+The chain sends a welcome message and then starts waiting for the user to say something.
+
+Once the user says something, the decision module is used to check if the user is staying on topic.
+
+The check is performed by combining the system message with a suffix instructing the chatbot to answer YES or NO, and using the last 2 messages from the chat history inside a question prompt that explains how to detect divergence and tells the chatbot to answer YES if it detects divergence (or NO if it doesn't).
+
+A DoesTextContain node is used to check the answer and make a simple binary decision.
+
+If divergence is detected, the chain branches, clears the chat history to avoid any jailbreaking attempts via further messages, and sends a hardcoded message that tells the user to only ask about dieting. An LLM is not used to generate the response in order to avoid wasting compute resources on users attempting to jailbreak the chatbot.
+
+If no topic divergence is detected, the chain uses the other logic branch to utilize the response generation module and generate a proper response. The logic here is similar to the decision generation part, since this module also receives a suffix for the system message and a prompt, with the difference being that the entire chat history is used to build the context inside the prompt, and the prompt itself is just an instruction to read the chat history and generate a response.
+
+Once a response is sent, the chain loops back to the CheckForNextMessage node and waits for the user to say something again.

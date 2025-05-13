@@ -1,0 +1,59 @@
+Workflows in OmniChain support a modular architecture, allowing you to create specific reusable segments which can be connected to multiple parts of the main chain. There are two ways to create such segments: portals and modules.
+
+## Portals
+
+Portals are the most primitive way to make a reusable segment. They are dataflow-only and each portal can carry only one connection, hence only one type of data. They are the simplest way to create a reusable segment. Portals are matched by a unique ID that you assign to them. Each ID can have one source going into it and multiple destinations coming out of it.
+
+For example, to create a portal that carries a piece of text like a central system prompt that you want to use multiple times in your chain, you would connect a Text node into a PortalInForString node, give it a unique ID like `MSG_SYSTEM`, and then use a PortalOutForString node with the same ID to connect it to the places where you want to use the text. You can have only one PortalInForString node with the ID `MSG_SYSTEM`, but you can have multiple PortalOutForString nodes using that same ID.
+
+![Screenshot - Portals](/images/s_portals.png)
+
+## Modules
+
+Modules allow the creation of more advanced reusable segments. Modules are matched up and utilized in a similar way to portals - you assign a unique ID to a single ModuleIO node, optionally make some connections to receive data from its outputs, and connect logic that produces some result into its inputs. You then use a Module node one or more times in the main part of your chain to reuse the segment defined by the ModuleIO node.
+
+Data inputs on the Module node are linked to data outputs on the ModuleIO node, and data inputs on the ModuleIO node are linked to data outputs on the Module node. You will also notice a non-editable `caller` field on each ModuleIO node - this is the ID of the Module node that is currently using (or last used) the ModuleIO node, and is there to allow the execution to jump back to the correct Module node.
+
+Note that you can also use modules in other modules freely.
+
+There are two types of modules: dataflow modules and hybrid modules.
+
+### Data Modules
+
+This type of module carries only data and no control flow. It is useful for creating reusable segments that are data-only. For example, you could make a module that takes a piece of text and uses inserts it into a prompt template, passes it into an LLM node, and then outputs the result. This would save you a lot of time and complexity if you need to reuse the same generation logic multiple times. Or you could just clean up the clutter in your main chain by moving some complex logic to its own spot. Here are two relevant screenshots from the safety & censorship example:
+
+ModuleIO node:
+
+<a target="_blank" rel="noopener noreferrer" href="/images/s_module_data_1.png">
+    ![Screenshot - data module IO](/images/s_module_data_1.png)
+</a>
+
+Module node:
+
+<a target="_blank" rel="noopener noreferrer" href="/images/s_module_data_2.png">
+    ![Screenshot - data module usage](/images/s_module_data_2.png)
+</a>
+
+### Control Modules
+
+Very similar to the dataflow modules, control modules have both data and trigger connections. They are useful for segments that do complex activities and require control flow. Here are two screenshots showing how the file ingestation module from the RAG example is set up:
+
+ModuleIO node:
+
+<a
+    target="_blank"
+    rel="noopener noreferrer"
+    href="/images/s_module_control_1.png"
+>
+    ![Screenshot - control module IO](/images/s_module_control_1.png)
+</a>
+
+Module node:
+
+<a
+    target="_blank"
+    rel="noopener noreferrer"
+    href="/images/s_module_control_2.png"
+>
+    ![Screenshot - control module usage](/images/s_module_control_2.png)
+</a>

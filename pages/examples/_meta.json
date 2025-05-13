@@ -1,0 +1,17 @@
+{
+    "basic-chatbot": {
+        "title": "Basic Chatbot"
+    },
+    "safety-censorship": {
+        "title": "Safety & Censorship"
+    },
+    "external-apis": {
+        "title": "External API calls"
+    },
+    "code_interpreter": {
+        "title": "Code Interpreter"
+    },
+    "rag": {
+        "title": "RAG"
+    }
+}

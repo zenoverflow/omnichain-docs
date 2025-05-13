@@ -1,0 +1,158 @@
+OmniChain is distributed as an open-source project on GitHub. The main branch will always contain the latest stable software version.
+
+## OmniChain (Core)
+
+### Requirements
+
+-   Windows / Linux / macOS
+-   Git
+-   NodeJS v20.11.0 or higher
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/zenoverflow/omnichain
+```
+
+2. Install dependencies:
+
+```bash
+cd omnichain
+npm install
+```
+
+3. Start the app:
+
+```bash
+npm run serve
+```
+
+4. Open your browser and navigate to `http://localhost:12538`.
+
+### Update
+
+Simply pull the latest changes from the repository and reinstall the dependencies:
+
+```bash
+git pull
+npm install
+```
+
+### Server configuration
+
+By default, the main server runs on port `12538`, and the OpenAI-compatible API runs on port `5002`. If the Python module is installed and running, it is expected on `http://localhost:12619`.
+
+You can change these defaults by passing the following arguments to the `npm run serve` command:
+
+```bash
+npm run serve -- --port 12345 --port_openai 5003 --module_python_url http://localhost:12619
+```
+
+## External Python Module (Optional)
+
+To support Python-only functionality and the ability to use custom Python code, OmniChain provides an external Python module that can be installed and run separately from the main app.
+
+### Requirements
+
+-   Windows (WSL) / Linux / macOS
+-   Git
+
+### Requirements (Nvidia GPU)
+
+-   CUDA Drivers & Compatibility with CUDA >= 11.8
+
+### Requirements (AMD GPU)
+
+-   ROCm Drivers & Compatibility with ROCm >= 6.1
+
+### Gotchas
+
+#### Windows Subsystem for Linux (WSL)
+
+The installation on WSL will only work if the project is on a path inside your WSL instance, like `/home/youruser/PROJECTS`. If you try to setup and run on the regular Windows filesystem, you will run into unfixable issues with symlinks.
+
+#### macOS
+
+CUDA and ROCm are not supported on macOS. Hardware acceleration is up to the devs of Pytorch and the other underlying libraries.
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/zenoverflow/omnichain_external_python
+```
+
+2. Make sure the setup script is executable:
+
+```bash
+chmod +x setup.sh
+```
+
+3. Run the setup script:
+
+-   For Nvidia GPUs (Linux only; CUDA version can be 11.8 / 12.1 / 12.4):
+
+```bash
+./setup.sh --device=cuda --cuda_version=12.4
+```
+
+-   For AMD GPUs (Linux only):
+
+```bash
+./setup.sh --device=rocm
+```
+
+-   For CPU-only
+
+```bash
+./setup.sh --device=cpu
+```
+
+-   For MacOS
+
+```bash
+./setup.sh
+```
+
+4. Make sure the server script is executable:
+
+```bash
+chmod +x start.sh
+```
+
+5. Run the server:
+
+-   Default (host: 127.0.0.1; port: 12619):
+
+```bash
+./start.sh
+```
+
+-   Customise host and port:
+
+```bash
+./start.sh --host=0.0.0.0 --port=8080
+```
+
+Note: If you change the host/port, or you run the server on a different machine, do not forget to update the `module_python_url` argument when starting the core app.
+
+### Update
+
+Simply pull the latest changes from the repository and rerun the setup script with the same arguments you used during the initial setup:
+
+```bash
+git pull
+./setup.sh --device=cuda --cuda_version=12.4
+```
+
+### Get help / Verify options
+
+Both the setup and start scripts support the `-h` flag to display the available options. This is useful if the documentation happens to be temporarily outdated:
+
+```bash
+./setup.sh -h
+./start.sh -h
+```

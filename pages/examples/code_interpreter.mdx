@@ -1,0 +1,53 @@
+import { DownloadExampleButton } from "../../components/DownloadExampleButton";
+
+## Build a barebones NodeJS code interpreter bot
+
+This is an example of a chatbot combined with OmniChain's code eval nodes to create a very simple construct that can write and execute NodeJS code.
+
+This chain is a simple illustrative example designed mainly to demonstrate more advanced ways of working with chat history in OmniChain. For added safety, it has a simple confirmation flow that lets the user read the code and decide whether to run it or not.
+
+Keep in mind that the system message tells the LLM to generate code by default, so if you want some explanation without writing code, you should specify that in your message like "Explain ... without writing code."
+
+Also, if you want the `Agent` and `System` names on the messages in the chat view, make sure to use the Avatars menu to create avatars with those exact names. Otherwise the responses from the LLM will be labelled as `Assistant` and the system responses as `User`, in other words they will be labelled using the underlying roles.
+
+Note: Configured to use Ollama with the `zenoverflow/replete_coder_3_1_8b_q8_custom` model. This model is better at Python than NodeJS, but testing correction of code is one of the points of this example.
+
+![Screenshot](/examples/Code_Interpreter.png)
+
+<DownloadExampleButton
+    title="Download"
+    fileUrl="/examples/Code_Interpreter.json"
+    fileName="Code_Interpreter.json"
+/>
+
+## Explanation
+
+### Modules
+
+-   LLM module - generates a response (top left)
+-   Agent response module - sends a response as `Agent` (top right)
+-   System response module - sends a response as `System` (below the agent response module)
+-   Code interpreter module - interprets code (bottom center)
+-   Main logic chain (top center)
+
+### Logic
+
+The system message in the agent response module is telling the LLM to act as an expert NodeJS developer and write code to do what the user asked for, if it deems that is possible.
+
+The user can send a message like: "Read the contents of the Downloads folder for the user named lizard. Format the result as bullet points. Note that you are on Linux."
+
+The main logic chain will then trigger the agent response module and the code interpreter module in this order. If the code interpreter module detects that the agent generated some code, it will display a message to ask the user if they want to run the code. This message has the `user` role so that the LLM doesn't decide to add the question to its code generation responses. The user is supposed to answer Y to run the code.
+
+If the user decides to run the code, a RegexExtractor node is used to grab the code from the code block in the chat history. The code is then sent to an EvalJsCode node to be executed. The output of the execution is inserted into a template string (to help the LLM understand that the output is a result of code execution) before being sent to the user. This message also has the `user` role.
+
+If the user decides not to run the code, the check at the end of the main chain will determine that the last message has been sent by the user and ask the LLM to generate a new response. Note that this check is using the avatar names to determine if the last message was sent by the user, so make sure your own chat avatar is not set to `System` or `Agent`.
+
+In the case of not wanting to run the code, there are two usual outcomes. Either the user tells the LLM to change some part of the code and it responds with new code, or the user just says that they don't want to run the code and the LLM decides how to reply on its own. Keep in mind that this simple example doesn't include any logic to support going back to execute the code after the user has denied it.
+
+Once the user has received the output, the logic chain will continue waiting for the next user message.
+
+If the result contains any errors, the user can always ask the LLM to try again.
+
+### A Simple Side Note
+
+This example is labelled "simple" because although it appears to contain a large number of nodes at first glance, a lot of them are just grabbing the correct chat messages, building responses, and defining the modules that split the logic so it's easier to organize. Only a small part of the chain is actually dedicated to the LLM inference and the code interpreter.

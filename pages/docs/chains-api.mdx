@@ -1,0 +1,134 @@
+OmniChain exposes an API in OpenAI's standard format with some additional features.
+
+## Configuration
+
+-   You use the `model` field in the request to specify the chain you want to run, using its ID, which you can get from the properties menu in the editor. The backend will automatically load the specified chain and use it to process the request. If another chain is running, it will be stopped automatically.
+-   The prompt/messages are passed as per OpenAI's format, and the response is returned in the same format. You can look at their documentation for more information on the [chat](https://platform.openai.com/docs/api-reference/chat/create) and [completions](https://platform.openai.com/docs/api-reference/completions/create) endpoints' response format.
+-   Other request parameters are ignored, since the chain itself is responsible for calling one or many models, configuring the inference, and processing the data, so things like sampler parameters are redundant.
+
+## Host
+
+By default, the API runs on port `5002` on `localhost`. You can change this port by running the serve command with the following argument:
+
+```bash
+npm run serve -- --port_openai 5003
+```
+
+## Endpoints
+
+### Completions
+
+```javascript
+const result = await fetch("http://localhost:5002/v1/completions", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        model: "88f86fb4-ff8d-4806-a606-e711de7fcdfd", // the ID of the chain to use
+        prompt: "Where does curry originate from?", // the prompt to send
+        // ...any other OAI arguments are ignored
+
+        // Clear the chat session after the request (default: true)
+        // _ocClearSession: false,
+    }),
+});
+
+const data = await result.json();
+
+console.log(JSON.stringify(data, null, 2));
+```
+
+### Chat completions
+
+```javascript
+const result = await fetch("http://localhost:5002/v1/chat/completions", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        model: "88f86fb4-ff8d-4806-a606-e711de7fcdfd", // the ID of the chain to use
+
+        // multiple messages are supported here
+        // all messages get stored in context
+        // only the last message is queued and detected via the CheckForNextMessage node
+        messages: [
+            {
+                role: "user",
+                content: "Where does curry originate from?",
+            },
+        ],
+        // ...any other OAI arguments are ignored
+
+        // Clear the chat session after the request (default: true)
+        // _ocClearSession: false,
+    }),
+});
+
+const data = await result.json();
+
+console.log(JSON.stringify(data, null, 2));
+```
+
+### Chat completions (files)
+
+Note: Unlike vanilla OpenAI (and most custom servers), OmniChain supports passing in **any** type of file here. OpenAI's format with `image_url` is followed for compatibility, but the url string can contain any file type, so you can pass in something like `data:text/plain;base64,(...)` or whatever type of file your chain is configured to handle.
+
+```javascript
+// Note: this script is using a newer version of node, hence the import syntax
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Note: this is how you get the current directory in ES modules
+// Use this with path.join() if your test image is in a subfolder
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Note: this is just an example, remember to put an actual image in the same folder as this script
+const img = fs.readFileSync("oai_api_chat_testimg.jpg").toString("base64");
+
+const result = await fetch("http://localhost:5002/v1/chat/completions", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        model: "8a4267fb-c6e4-425b-9f52-ab28bd0e3342", // the ID of the chain to use
+
+        // multiple messages are supported here
+        // all messages get stored in context
+        // only the last message is put on the queue to be detected by the CheckForNextMessage node
+        messages: [
+            {
+                role: "user",
+                content: [
+                    // Each message can contain only a single text object
+                    { type: "text", text: "What's in this image?" },
+                    // But it can contain multiple image/file objects
+                    {
+                        type: "image_url", // always use image_url, even for files
+                        image_url: {
+                            url: "data:image/jpeg;base64," + img,
+                        },
+                    },
+                    // {
+                    //     type: "image_url", // always use image_url, even for files
+                    //     image_url: {
+                    //         url: "data:image/jpeg;base64," + img,
+                    //     },
+                    // },
+                ],
+            },
+        ],
+        // ...any other OAI arguments are ignored
+
+        // Clear the chat session after the request (default: true)
+        // _ocClearSession: false,
+    }),
+});
+
+const data = await result.json();
+
+console.log(JSON.stringify(data, null, 2));
+```

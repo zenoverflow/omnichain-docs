@@ -1,0 +1,41 @@
+{
+    "setup": {
+        "title": "Setup"
+    },
+    "quick-start-guide": {
+        "title": "Quick-Start Guide"
+    },
+    "interface": {
+        "title": "Interface"
+    },
+    "chains": {
+        "title": "Chains & Nodes"
+    },
+    "llm-backends": {
+        "title": "LLM Backends"
+    },
+    "flow": {
+        "title": "Execution Flow"
+    },
+    "logic-branching": {
+        "title": "Logic Branching"
+    },
+    "portals-modules": {
+        "title": "Portals & Modules"
+    },
+    "control-overrides": {
+        "title": "Control Overrides"
+    },
+    "chains-api": {
+        "title": "API"
+    },
+    "custom-nodes": {
+        "title": "Custom Nodes"
+    },
+    "open-webui": {
+        "title": "Open WebUI"
+    },
+    "python-code": {
+        "title": "Python Code"
+    }
+}

@@ -1,0 +1,44 @@
+import { DownloadExampleButton } from "../../components/DownloadExampleButton";
+
+## Build a simple RAG chain with LanceDB
+
+This is an example of how to integrate some RAG functionality into a chain.
+
+Note: Configured to use Ollama with the `llama3.1:8b-instruct-q8_0` model.
+
+The chain creates an empty LanceDB table and then waits for the user to send a message containing a document and a question. After a bit of processing to ingest the document into LanceDB, the chain uses the text from the message to retrieve relevant data from the table, feed the data and the question into a prompt, and use an LLM to answer the question.
+
+Before running this chain, make sure to change the location of the LanceDB instance on disk! You can do this by editing the second TextField node on the top left. Change `/home/user/Downloads/testdb` to a location that suits you.
+
+Note that the example is only for illustrative purposes (to show you how the embedding and LanceDB nodes work) and is not meant to be used in a production environment. If you are making a production chain, you should include a reranker, have the model generate a query for the database by looking at the chat history instead of just using the last user message, etc.
+
+![Screenshot](/examples/RAG.png)
+
+<DownloadExampleButton
+    title="Download"
+    fileUrl="/examples/RAG.json"
+    fileName="RAG.json"
+/>
+
+## Explanation
+
+### Modules
+
+-   LanceDB instance location on disk (top left)
+-   LanceDB table name (right of the LanceDB instance location)
+-   Embedding module (below the LanceDB config nodes)
+-   LanceDB init module (bottom left)
+-   LanceDB ingest module (bottom right)
+-   Main logic chain (top right)
+
+### Logic
+
+The chain starts by using the init module to create an empty LanceDB table. It then uses the CheckForNextMessage node to wait for messages.
+
+Since this is just a simple non-production example, the user is expected to send a message containing a question and a document. The chain then uses the ingest module to embed and store the document in LanceDB.
+
+After ingesting the document, the chain uses the text from the message to retrieve relevant data from the table, feed the data and the question into a prompt, and use an LLM to answer the question.
+
+The embedding module is re-used for both the ingestation and the retrieval of the data from LanceDB. In this case, the Ollama backend is used to load an embedding model and generate embeddings.
+
+Once the first question is answered, the chain loops back to the CheckForNextMessage node and waits for the user to send another message. The second message can be another question without a document, in which case the chain will just answer the question using the data from the first document, or it can be a new document and a question, in which case the chain will ingest the new document and answer the new question using data from both documents.

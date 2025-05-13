@@ -1,0 +1,151 @@
+{
+  "name": "Basic Chatbot",
+  "graphId": "2ea22a6d-b142-462f-9b54-00b6a42e1585",
+  "nodes": [
+    {
+      "nodeType": "StartNode",
+      "nodeId": "641e8dc07410ac4e",
+      "controls": {},
+      "positionX": -410.80912513956696,
+      "positionY": 312.31503227232463
+    },
+    {
+      "nodeType": "CheckForNextMessageNode",
+      "nodeId": "d1ba6b46e9526e06",
+      "controls": {
+        "waitTimeMs": 100
+      },
+      "positionX": 41.07452641831816,
+      "positionY": -253.82091226361365
+    },
+    {
+      "nodeType": "BlockChatNode",
+      "nodeId": "f621420177658a6e",
+      "controls": {
+        "action": "block"
+      },
+      "positionX": 568.2081154202176,
+      "positionY": -382.94395311181324
+    },
+    {
+      "nodeType": "ResponseNode",
+      "nodeId": "ec2e589a687c4a50",
+      "controls": {},
+      "positionX": 1060.3489303593922,
+      "positionY": -456.71725080400745
+    },
+    {
+      "nodeType": "BuildMessageNode",
+      "nodeId": "a9f2046f1b1292c9",
+      "controls": {
+        "role": "assistant"
+      },
+      "positionX": 1024.060138678341,
+      "positionY": -83.03955520487838
+    },
+    {
+      "nodeType": "ReadSessionMessagesNode",
+      "nodeId": "8af54db1f65f3ed8",
+      "controls": {
+        "limit": -1
+      },
+      "positionX": 453.48475902213374,
+      "positionY": 479.9066956272958
+    },
+    {
+      "nodeType": "OllamaChatCompletionNode",
+      "nodeId": "fe0240553bc1a3a4",
+      "controls": {
+        "model": "llama3.1:8b-instruct-q8_0",
+        "mirostat": "0",
+        "mirostatEta": 0.1,
+        "mirostatTau": 5,
+        "numCtx": 8192,
+        "repeatLastN": 0,
+        "repeatPenalty": 1.1,
+        "temperature": 0.8,
+        "seed": null,
+        "stop": null,
+        "tfsZ": 1,
+        "numPredict": -2,
+        "topK": 0,
+        "topP": 1,
+        "host": "http://localhost:11434",
+        "keepAlive": -1,
+        "json": "false"
+      },
+      "positionX": 878.8049580568262,
+      "positionY": 364.20142257298363
+    },
+    {
+      "nodeType": "BlockChatNode",
+      "nodeId": "ddd5a1a0b76b1feb",
+      "controls": {
+        "action": "unblock"
+      },
+      "positionX": -686.6203139461084,
+      "positionY": -21.375350399791643
+    }
+  ],
+  "connections": [
+    {
+      "source": "641e8dc07410ac4e",
+      "sourceOutput": "triggerOut",
+      "target": "d1ba6b46e9526e06",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "d1ba6b46e9526e06",
+      "sourceOutput": "noMsg",
+      "target": "d1ba6b46e9526e06",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "d1ba6b46e9526e06",
+      "sourceOutput": "haveMsg",
+      "target": "f621420177658a6e",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "f621420177658a6e",
+      "sourceOutput": "triggerOut",
+      "target": "ec2e589a687c4a50",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "a9f2046f1b1292c9",
+      "sourceOutput": "message",
+      "target": "ec2e589a687c4a50",
+      "targetInput": "message"
+    },
+    {
+      "source": "8af54db1f65f3ed8",
+      "sourceOutput": "messages",
+      "target": "fe0240553bc1a3a4",
+      "targetInput": "messages"
+    },
+    {
+      "source": "fe0240553bc1a3a4",
+      "sourceOutput": "result",
+      "target": "a9f2046f1b1292c9",
+      "targetInput": "content"
+    },
+    {
+      "source": "ec2e589a687c4a50",
+      "sourceOutput": "triggerOut",
+      "target": "ddd5a1a0b76b1feb",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "ddd5a1a0b76b1feb",
+      "sourceOutput": "triggerOut",
+      "target": "d1ba6b46e9526e06",
+      "targetInput": "triggerIn"
+    }
+  ],
+  "zoom": 0.5178192749792389,
+  "areaX": 534.4763824462888,
+  "areaY": 359.83603820800823,
+  "created": 1718271002066,
+  "execPersistence": "onChange"
+}

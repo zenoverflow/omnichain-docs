@@ -1,0 +1,92 @@
+import { ColoredDot } from "../../components/ColoredDot";
+
+Chains are custom logic workflows that you build with OmniChain. They are made up of nodes that represent actions, decisions, and data, all in one flexible package. Nodes in OmniChain are not just for logic and data transformation, they can also store data and update themselves during execution. The last part means you can build chains that remember things, make decisions based on that information, and act accordingly.
+
+A node consists of inputs, controls, and outputs. A node's controls are not only used to configure a node's behavior, they can also act as data storage for specific nodes.
+
+There are three types of nodes in OmniChain - dataflow nodes, controlflow nodes, and hybrid nodes.
+
+## Dataflow Nodes
+
+These are simple nodes that deal with data transformation and/or storage. They take one or more inputs from other nodes, process the data, and output the result to other nodes. Dataflow nodes have only data inputs and outputs. The simplest example of this are the nodes that call an LLM API to generate text.
+
+![The OllamaChatCompletion node](/images/s_node_ollama_chat.png)
+
+## Controlflow Nodes
+
+These are the main logic elements of the chains in OmniChain. Controlflow nodes are used to make decisions, and control where the flow of the chain goes. They are usually defined by the presence of trigger inputs/outputs, and may or may not have data inputs. Examples of this are the nodes that check if a condition is true or false.
+
+![The RegexCheck node](/images/s_node_regexcheck.png)
+
+## Hybrid Nodes
+
+These are controlflow nodes that also have data outputs. They are the most powerful and important type of node, because they can not only define the flow of data in the chain, but also store and update data on-demand. The best example of this is the GrabText node, which has triggers for getting data from dataflow nodes, a text control for storage, and an output for other nodes to read the data as many times as needed, without re-triggering the computation that generated it.
+
+![The GrabText node](/images/s_node_grabtext.png)
+
+## Node operations
+
+You can do the following things with nodes in OmniChain's editor:
+
+-   Right-click on the canvas to open the main context menu, which lets you add new nodes.
+
+![Context menu](/images/s_contextmenu.png)
+
+-   Select and drag a node with the left mouse button to move it around the canvas.
+
+![Node dragging](/images/s_select_drag.png)
+
+-   Right-click on a node to open the node context menu, which lets you duplicate and delete a node. Note that duplication copies control values, but does not copy connections.
+
+![Node context menu](/images/s_contextmenu_node.png)
+
+-   Left-click on any number of nodes while holding the Ctrl key to select multiple nodes, or hold Shift while left-clicking and drag the mouse to use the selection box. You can move them all at once, by pressing Ctrl and dragging one of the selected nodes. You can also copy and paste one or more nodes by pressing Ctrl+C and Ctrl+V, respectively. If you want to copy connections as well, use Ctrl+Alt+C. Note that you can copy and paste nodes (with their connections) between different chains too!
+
+![Selection box](/images/s_select_lasso.png)
+
+-   Delete nodes by pressing the Delete key or by using the delete button that shows up in the upper right corner of the editor when you have selected at least one node. Note that the Delete key does not display a confirmation, but the button does.
+
+![Delete button](/images/s_delete_nodes.png)
+
+## Connections
+
+Nodes are connected by their inputs and outputs. Inputs are always located on the left side of the node, while outputs are on the right side. To connect two nodes, simply drag a line from an output to an input, using the mouse. To remove a connection, simply hover the mouse over it and middle-click. Note that an output may be connected to an input only if they are using the same connection type.
+
+The connection types are the following:
+
+-   `trigger` <ColoredDot color="#f5222d" /> used to control the flow of the chain
+-   `string` <ColoredDot color="#52c41a" /> used to pass text data
+-   `stringArray` <ColoredDot color="#2f54eb" /> used to pass arrays of text data
+-   `file` <ColoredDot color="#fadb14" /> used to pass file data
+-   `fileArray` <ColoredDot color="#faad14" /> used to pass arrays of file data
+-   `chatMessage` <ColoredDot color="#d3adf7" /> used to pass chat messages
+-   `chatMessageArray` <ColoredDot color="#722ed1" /> used to pass arrays of chat
+    messages
+-   `slot` <ColoredDot color="#13c2c2" /> used to pass string values labeled with
+    a key
+
+The editor will draw each connection type with a different color, and highlight connections when you hover the mouse over them, for easier navigation and editing.
+
+![Connections](/images/s_connections.png)
+
+Note that some nodes support multiple connections to a specific input (like the TemplateBuilder node, which accepts multiple slot connections), and most nodes support multiple connections from any output, with the exception of trigger outputs, which can only have one connection, and cannot be configured otherwise. As for trigger inputs, they can have multiple connections, so that a controlflow or hybrid node can be triggered by multiple other nodes.
+
+Also note that outputs of one node can be connected to inputs on the same node. This is especially useful for creating loops with controlflow and hybrid nodes.
+
+## Controls
+
+Controls in OmniChain are simplified to the basics in order to simplify logic in the app. The only types of controls are:
+
+-   `text`: for text inputs
+-   `number`: for number inputs
+-   `select`: for selection one of a set of predefined options
+
+![Controls](/images/s_controls_fields.png)
+
+You may have also noticed the large textboxes - those are simply more advanced text inputs with support for a larger pop-up editor which can be used to write more complex text, such as code snippets.
+
+![Large text control](/images/s_controls_text_large.png)
+
+![Large text control modal](/images/s_controls_text_large_modal.png)
+
+Controls cannot be updated from the editor while the chain is running, but some nodes, like the GrabText node are configured to update their controls during execution, so that you can store and update data on-demand.

@@ -1,0 +1,45 @@
+Since OmniChain is built to function more like a visual programming language than a traditional workflow builder, the controlflow logic supports branching and looping. Branching in particular allows you to create complex chains that can handle a wide variety of scenarios.
+
+Since information processing is done mainly with text, the branching logic is based on text comparisons. This means that you can use the output of an LLM node to make decisions in your chain.
+
+## Binary branching
+
+This is the simplest form of branching where the control flow is split into two paths based on a comparison. Here is an example from the safety and censorship example where an LLM is asked whether the user is trying to diverge from a specific topic. If no divergence is detected, the chain continues with the main logic. If divergence is detected, a hardcoded response is generated after clearing the chat session to avoid jailbreak attempts. The node used to check text is the simple DoesTextContain node.
+
+Screenshot:
+
+<a
+    target="_blank"
+    rel="noopener noreferrer"
+    href="/images/s_branching_binary.png"
+>
+    ![Screenshot - Binary Branching](/images/s_branching_binary.png)
+</a>
+
+Note that for more complex checks, you would use the RegexCheck node.
+
+## Complex branching
+
+If you want to have a complex scenario with lots of possible conditions, you use the RegexGroupTargeter node along with the IngexTrigger node. The RegexGroupTargeter node allows you to define multiple possible conditions via regex groups and the pipe character `|`, and it outputs the index of the first group that matches. The IngexTrigger node then uses this index to decide which path to take.
+
+RegexGroupTargeter screenshot:
+
+<a
+    target="_blank"
+    rel="noopener noreferrer"
+    href="/images/s_branching_complex_1.png"
+>
+    ![Screenshot - RegexGroupTargeter](/images/s_branching_complex_1.png)
+</a>
+
+If you need to have more than 10 possible conditions, you can chain together multiple IndexTrigger nodes, and increment the `batch number` control by 1 for each group of conditions.
+
+IndexTrigger chaining screenshot:
+
+<a
+    target="_blank"
+    rel="noopener noreferrer"
+    href="/images/s_branching_complex_2.png"
+>
+    ![Screenshot - IndexTrigger Chaining](/images/s_branching_complex_2.png)
+</a>

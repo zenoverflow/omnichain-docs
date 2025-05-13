@@ -1,0 +1,717 @@
+{
+  "name": "RAG",
+  "graphId": "4b109e01-a4b0-497a-a979-37a3de164fd6",
+  "nodes": [
+    {
+      "nodeType": "StartNode",
+      "nodeId": "338bf42ab8d67ffa",
+      "controls": {},
+      "positionX": -3845.828515299879,
+      "positionY": -15.810888753708511
+    },
+    {
+      "nodeType": "CheckForNextMessageNode",
+      "nodeId": "ae6b41282a314724",
+      "controls": {
+        "waitTimeMs": 100
+      },
+      "positionX": -2938.3211489068703,
+      "positionY": -814.0982940990439
+    },
+    {
+      "nodeType": "BlockChatNode",
+      "nodeId": "a718f4ead3fc299b",
+      "controls": {
+        "action": "block"
+      },
+      "positionX": -2400.676132051814,
+      "positionY": -945.6516671507078
+    },
+    {
+      "nodeType": "ReadSessionMessagesNode",
+      "nodeId": "510d3595419f15b1",
+      "controls": {
+        "limit": -1
+      },
+      "positionX": -1280.4392509773193,
+      "positionY": 1043.2710122162807
+    },
+    {
+      "nodeType": "OllamaChatCompletionNode",
+      "nodeId": "e12b545d6ad6cf85",
+      "controls": {
+        "model": "llama3.1:8b-instruct-q8_0",
+        "mirostat": "0",
+        "mirostatEta": 0.1,
+        "mirostatTau": 5,
+        "numCtx": 8192,
+        "repeatLastN": 0,
+        "repeatPenalty": 1.1,
+        "temperature": 0.8,
+        "seed": null,
+        "stop": null,
+        "tfsZ": 1,
+        "numPredict": -2,
+        "topK": 1,
+        "topP": 1,
+        "host": "http://localhost:11434",
+        "keepAlive": -1,
+        "json": "false"
+      },
+      "positionX": -1422.298889195043,
+      "positionY": -229.10072920244784
+    },
+    {
+      "nodeType": "TemplateBuilderNode",
+      "nodeId": "89d25b558e3801d4",
+      "controls": {
+        "val": "You are a specialized research agent. You are provided with a library to help you to answer the user's questions.\n-- BEGIN LIBRARY --\n{library}\n-- END LIBRARY --\nYou will now be asked a question."
+      },
+      "positionX": -2160.656629025985,
+      "positionY": -149.09589652723457
+    },
+    {
+      "nodeType": "LanceDBQueryTable",
+      "nodeId": "2cce95cb5bfee8d6",
+      "controls": {
+        "metric": "cosine",
+        "limit": 10
+      },
+      "positionX": -2830.123365650024,
+      "positionY": 805.3812140618268
+    },
+    {
+      "nodeType": "ReadCurrentMessageTextNode",
+      "nodeId": "3181ad39578d8a38",
+      "controls": {},
+      "positionX": -3805.0569728365294,
+      "positionY": 1215.5085709383993
+    },
+    {
+      "nodeType": "TextJoinNode",
+      "nodeId": "6fa0581e6c5956eb",
+      "controls": {
+        "separator": "\\n\\n"
+      },
+      "positionX": -2039.369666429458,
+      "positionY": 784.8512583585248
+    },
+    {
+      "nodeType": "ResponseNode",
+      "nodeId": "adc74396d10deab4",
+      "controls": {},
+      "positionX": -1212.966747907842,
+      "positionY": -1054.5736451892496
+    },
+    {
+      "nodeType": "BuildMessageNode",
+      "nodeId": "63b35dbf88efd6c7",
+      "controls": {
+        "role": "assistant"
+      },
+      "positionX": -1217.5275140473445,
+      "positionY": -688.7346483374818
+    },
+    {
+      "nodeType": "BlockChatNode",
+      "nodeId": "fc79ff74adb08971",
+      "controls": {
+        "action": "unblock"
+      },
+      "positionX": -3492.404154083207,
+      "positionY": -614.6892932706937
+    },
+    {
+      "nodeType": "DataModuleIONode",
+      "nodeId": "2057a7d49c94142c",
+      "controls": {
+        "module": "DM_EMBED",
+        "caller": "882c5be56b88553e"
+      },
+      "positionX": -6284.014971512364,
+      "positionY": 420.33868780156314
+    },
+    {
+      "nodeType": "OllamaEmbeddingsNode",
+      "nodeId": "c73829a8bd8bb5be",
+      "controls": {
+        "model": "nomic-embed-text",
+        "mirostat": "0",
+        "mirostatEta": 0.1,
+        "mirostatTau": 5,
+        "numCtx": 8192,
+        "repeatLastN": 0,
+        "repeatPenalty": 1.1,
+        "temperature": 0.8,
+        "seed": null,
+        "stop": null,
+        "tfsZ": 1,
+        "numPredict": -2,
+        "topK": 1,
+        "topP": 1,
+        "host": "http://localhost:11434",
+        "keepAlive": -1
+      },
+      "positionX": -5643.246432520394,
+      "positionY": 386.28033401890247
+    },
+    {
+      "nodeType": "DataModuleNode",
+      "nodeId": "882c5be56b88553e",
+      "controls": {
+        "module": "DM_EMBED"
+      },
+      "positionX": -3421.720104448265,
+      "positionY": 1018.8370655423671
+    },
+    {
+      "nodeType": "TextFieldNode",
+      "nodeId": "3b60ae338c58a689",
+      "controls": {
+        "val": "library"
+      },
+      "positionX": -6469.324933859662,
+      "positionY": -554.5825413335134
+    },
+    {
+      "nodeType": "PortalInForStringNode",
+      "nodeId": "4459de9c0b8eaa1a",
+      "controls": {
+        "portal": "C_DB_TABLE"
+      },
+      "positionX": -6361.723984553181,
+      "positionY": -826.5097562975053
+    },
+    {
+      "nodeType": "TextFieldNode",
+      "nodeId": "5faabd897ad04fed",
+      "controls": {
+        "val": "/home/user/Downloads/testdb"
+      },
+      "positionX": -5362.746555463367,
+      "positionY": -568.464835290377
+    },
+    {
+      "nodeType": "PortalInForStringNode",
+      "nodeId": "c87711dad037a391",
+      "controls": {
+        "portal": "C_DB_LOC"
+      },
+      "positionX": -5239.049679526963,
+      "positionY": -836.3680685968885
+    },
+    {
+      "nodeType": "ControlModuleIONode",
+      "nodeId": "03c21cd8bef14bde",
+      "controls": {
+        "module": "M_INIT",
+        "caller": "722857bfd487caca"
+      },
+      "positionX": -6825.167656581236,
+      "positionY": 2348.5402320361695
+    },
+    {
+      "nodeType": "LanceDBCreateTable",
+      "nodeId": "87efbba4d3a321ef",
+      "controls": {
+        "overwrite": "true"
+      },
+      "positionX": -5275.80289189616,
+      "positionY": 2363.5620183219253
+    },
+    {
+      "nodeType": "TextFieldNode",
+      "nodeId": "938859fada6abc31",
+      "controls": {
+        "val": "Empty Content."
+      },
+      "positionX": -7310.841346741598,
+      "positionY": 3249.284435681162
+    },
+    {
+      "nodeType": "DataModuleNode",
+      "nodeId": "3242bb167c64cf9c",
+      "controls": {
+        "module": "DM_EMBED"
+      },
+      "positionX": -6629.186056970835,
+      "positionY": 3426.065780834456
+    },
+    {
+      "nodeType": "ArrayFromStringNode",
+      "nodeId": "5a96a280c7d9131e",
+      "controls": {},
+      "positionX": -6018.673172528582,
+      "positionY": 3308.3880583300993
+    },
+    {
+      "nodeType": "ArrayFromStringNode",
+      "nodeId": "21df6987490c83e3",
+      "controls": {},
+      "positionX": -6087.682552075048,
+      "positionY": 2995.287154472636
+    },
+    {
+      "nodeType": "PortalOutForStringNode",
+      "nodeId": "796e699a23f831fe",
+      "controls": {
+        "portal": "C_DB_LOC"
+      },
+      "positionX": -6149.484439799142,
+      "positionY": 2567.7158253744838
+    },
+    {
+      "nodeType": "PortalOutForStringNode",
+      "nodeId": "667ffc700e9ce3f9",
+      "controls": {
+        "portal": "C_DB_TABLE"
+      },
+      "positionX": -6149.698172067643,
+      "positionY": 2765.834328613954
+    },
+    {
+      "nodeType": "SlotSimpleNode",
+      "nodeId": "9cdcbc7e6151e70f",
+      "controls": {
+        "slotName": "library"
+      },
+      "positionX": -2026.9736999785086,
+      "positionY": 475.3448816999597
+    },
+    {
+      "nodeType": "ControlModuleNode",
+      "nodeId": "722857bfd487caca",
+      "controls": {
+        "module": "M_INIT"
+      },
+      "positionX": -3571.451690972491,
+      "positionY": -321.88191855167855
+    },
+    {
+      "nodeType": "ControlModuleIONode",
+      "nodeId": "193f07e7f9f05cde",
+      "controls": {
+        "module": "M_INGEST",
+        "caller": "70ddc4b8a3d8f28c"
+      },
+      "positionX": -3545.00552390882,
+      "positionY": 3104.455634764508
+    },
+    {
+      "nodeType": "ReadCurrentMessageFilesNode",
+      "nodeId": "1b0633e1f6ac5c2c",
+      "controls": {
+        "type": "*/*"
+      },
+      "positionX": -3554.801744057571,
+      "positionY": 3921.3657645247663
+    },
+    {
+      "nodeType": "LoopFileArrayNode",
+      "nodeId": "ddf6321f588ff96f",
+      "controls": {},
+      "positionX": -2827.925681703643,
+      "positionY": 2885.075090749612
+    },
+    {
+      "nodeType": "ChunkTextForEmbedding",
+      "nodeId": "274c331471d2d842",
+      "controls": {
+        "size": 1000,
+        "overlap": 200
+      },
+      "positionX": -2223.905976616111,
+      "positionY": 3053.672329619735
+    },
+    {
+      "nodeType": "ExtractOfficeFileText",
+      "nodeId": "f0378cb1b7b2b18e",
+      "controls": {},
+      "positionX": -2283.915829843728,
+      "positionY": 3409.9330793678455
+    },
+    {
+      "nodeType": "LoopStringArrayNode",
+      "nodeId": "4278d5cab5cc27f0",
+      "controls": {},
+      "positionX": -2168.6855412764844,
+      "positionY": 2629.994439060957
+    },
+    {
+      "nodeType": "LanceDBAddToTable",
+      "nodeId": "236084fa2c5a85d7",
+      "controls": {},
+      "positionX": -287.44965960250124,
+      "positionY": 2553.9739035945913
+    },
+    {
+      "nodeType": "ArrayFromStringNode",
+      "nodeId": "2d3b438fc52677be",
+      "controls": {},
+      "positionX": -915.271948904495,
+      "positionY": 3396.1605754938637
+    },
+    {
+      "nodeType": "ArrayFromStringNode",
+      "nodeId": "497ae88e127d9fb2",
+      "controls": {},
+      "positionX": -909.1020136436375,
+      "positionY": 3145.433270602552
+    },
+    {
+      "nodeType": "PortalOutForStringNode",
+      "nodeId": "705bdc66af0f3a61",
+      "controls": {
+        "portal": "C_DB_LOC"
+      },
+      "positionX": -1107.6927629731508,
+      "positionY": 2770.0324623680453
+    },
+    {
+      "nodeType": "PortalOutForStringNode",
+      "nodeId": "3790600105a7f9d2",
+      "controls": {
+        "portal": "C_DB_TABLE"
+      },
+      "positionX": -1107.906495241652,
+      "positionY": 2967.935343831725
+    },
+    {
+      "nodeType": "DataModuleNode",
+      "nodeId": "92d03f2efae94149",
+      "controls": {
+        "module": "DM_EMBED"
+      },
+      "positionX": -1514.6632035515524,
+      "positionY": 3296.7097473271615
+    },
+    {
+      "nodeType": "PortalOutForStringNode",
+      "nodeId": "844bf44de6c2bfb8",
+      "controls": {
+        "portal": "C_DB_LOC"
+      },
+      "positionX": -3372.4261351511,
+      "positionY": 598.7621063573097
+    },
+    {
+      "nodeType": "PortalOutForStringNode",
+      "nodeId": "26b2f6ce0ef34f77",
+      "controls": {
+        "portal": "C_DB_TABLE"
+      },
+      "positionX": -3364.8430725969324,
+      "positionY": 798.4120130768199
+    },
+    {
+      "nodeType": "ControlModuleNode",
+      "nodeId": "70ddc4b8a3d8f28c",
+      "controls": {
+        "module": "M_INGEST"
+      },
+      "positionX": -2014.1107462591422,
+      "positionY": -955.4231804555565
+    }
+  ],
+  "connections": [
+    {
+      "source": "ae6b41282a314724",
+      "sourceOutput": "haveMsg",
+      "target": "a718f4ead3fc299b",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "ae6b41282a314724",
+      "sourceOutput": "noMsg",
+      "target": "ae6b41282a314724",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "510d3595419f15b1",
+      "sourceOutput": "messages",
+      "target": "e12b545d6ad6cf85",
+      "targetInput": "messages"
+    },
+    {
+      "source": "2cce95cb5bfee8d6",
+      "sourceOutput": "results",
+      "target": "6fa0581e6c5956eb",
+      "targetInput": "textArr"
+    },
+    {
+      "source": "63b35dbf88efd6c7",
+      "sourceOutput": "message",
+      "target": "adc74396d10deab4",
+      "targetInput": "message"
+    },
+    {
+      "source": "e12b545d6ad6cf85",
+      "sourceOutput": "result",
+      "target": "63b35dbf88efd6c7",
+      "targetInput": "content"
+    },
+    {
+      "source": "89d25b558e3801d4",
+      "sourceOutput": "result",
+      "target": "e12b545d6ad6cf85",
+      "targetInput": "system"
+    },
+    {
+      "source": "adc74396d10deab4",
+      "sourceOutput": "triggerOut",
+      "target": "fc79ff74adb08971",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "fc79ff74adb08971",
+      "sourceOutput": "triggerOut",
+      "target": "ae6b41282a314724",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "2057a7d49c94142c",
+      "sourceOutput": "string",
+      "target": "c73829a8bd8bb5be",
+      "targetInput": "prompt"
+    },
+    {
+      "source": "c73829a8bd8bb5be",
+      "sourceOutput": "result",
+      "target": "2057a7d49c94142c",
+      "targetInput": "string"
+    },
+    {
+      "source": "3181ad39578d8a38",
+      "sourceOutput": "content",
+      "target": "882c5be56b88553e",
+      "targetInput": "string"
+    },
+    {
+      "source": "882c5be56b88553e",
+      "sourceOutput": "string",
+      "target": "2cce95cb5bfee8d6",
+      "targetInput": "embedding"
+    },
+    {
+      "source": "3b60ae338c58a689",
+      "sourceOutput": "out",
+      "target": "4459de9c0b8eaa1a",
+      "targetInput": "source"
+    },
+    {
+      "source": "5faabd897ad04fed",
+      "sourceOutput": "out",
+      "target": "c87711dad037a391",
+      "targetInput": "source"
+    },
+    {
+      "source": "3242bb167c64cf9c",
+      "sourceOutput": "string",
+      "target": "5a96a280c7d9131e",
+      "targetInput": "sourceStr1"
+    },
+    {
+      "source": "938859fada6abc31",
+      "sourceOutput": "out",
+      "target": "3242bb167c64cf9c",
+      "targetInput": "string"
+    },
+    {
+      "source": "21df6987490c83e3",
+      "sourceOutput": "outArr",
+      "target": "87efbba4d3a321ef",
+      "targetInput": "texts"
+    },
+    {
+      "source": "5a96a280c7d9131e",
+      "sourceOutput": "outArr",
+      "target": "87efbba4d3a321ef",
+      "targetInput": "embeddings"
+    },
+    {
+      "source": "938859fada6abc31",
+      "sourceOutput": "out",
+      "target": "21df6987490c83e3",
+      "targetInput": "sourceStr1"
+    },
+    {
+      "source": "796e699a23f831fe",
+      "sourceOutput": "out",
+      "target": "87efbba4d3a321ef",
+      "targetInput": "uri"
+    },
+    {
+      "source": "667ffc700e9ce3f9",
+      "sourceOutput": "out",
+      "target": "87efbba4d3a321ef",
+      "targetInput": "table"
+    },
+    {
+      "source": "03c21cd8bef14bde",
+      "sourceOutput": "triggerOut",
+      "target": "87efbba4d3a321ef",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "87efbba4d3a321ef",
+      "sourceOutput": "triggerOut",
+      "target": "03c21cd8bef14bde",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "6fa0581e6c5956eb",
+      "sourceOutput": "result",
+      "target": "9cdcbc7e6151e70f",
+      "targetInput": "value"
+    },
+    {
+      "source": "9cdcbc7e6151e70f",
+      "sourceOutput": "slot",
+      "target": "89d25b558e3801d4",
+      "targetInput": "parts"
+    },
+    {
+      "source": "338bf42ab8d67ffa",
+      "sourceOutput": "triggerOut",
+      "target": "722857bfd487caca",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "722857bfd487caca",
+      "sourceOutput": "triggerOut",
+      "target": "ae6b41282a314724",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "1b0633e1f6ac5c2c",
+      "sourceOutput": "files",
+      "target": "ddf6321f588ff96f",
+      "targetInput": "sourceArr"
+    },
+    {
+      "source": "193f07e7f9f05cde",
+      "sourceOutput": "triggerOut",
+      "target": "ddf6321f588ff96f",
+      "targetInput": "run"
+    },
+    {
+      "source": "f0378cb1b7b2b18e",
+      "sourceOutput": "text",
+      "target": "274c331471d2d842",
+      "targetInput": "text"
+    },
+    {
+      "source": "274c331471d2d842",
+      "sourceOutput": "chunks",
+      "target": "4278d5cab5cc27f0",
+      "targetInput": "sourceArr"
+    },
+    {
+      "source": "ddf6321f588ff96f",
+      "sourceOutput": "item",
+      "target": "f0378cb1b7b2b18e",
+      "targetInput": "file"
+    },
+    {
+      "source": "ddf6321f588ff96f",
+      "sourceOutput": "next",
+      "target": "4278d5cab5cc27f0",
+      "targetInput": "run"
+    },
+    {
+      "source": "4278d5cab5cc27f0",
+      "sourceOutput": "done",
+      "target": "ddf6321f588ff96f",
+      "targetInput": "run"
+    },
+    {
+      "source": "ddf6321f588ff96f",
+      "sourceOutput": "done",
+      "target": "193f07e7f9f05cde",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "2d3b438fc52677be",
+      "sourceOutput": "outArr",
+      "target": "236084fa2c5a85d7",
+      "targetInput": "embeddings"
+    },
+    {
+      "source": "497ae88e127d9fb2",
+      "sourceOutput": "outArr",
+      "target": "236084fa2c5a85d7",
+      "targetInput": "texts"
+    },
+    {
+      "source": "705bdc66af0f3a61",
+      "sourceOutput": "out",
+      "target": "236084fa2c5a85d7",
+      "targetInput": "uri"
+    },
+    {
+      "source": "3790600105a7f9d2",
+      "sourceOutput": "out",
+      "target": "236084fa2c5a85d7",
+      "targetInput": "table"
+    },
+    {
+      "source": "4278d5cab5cc27f0",
+      "sourceOutput": "next",
+      "target": "236084fa2c5a85d7",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "4278d5cab5cc27f0",
+      "sourceOutput": "item",
+      "target": "497ae88e127d9fb2",
+      "targetInput": "sourceStr1"
+    },
+    {
+      "source": "4278d5cab5cc27f0",
+      "sourceOutput": "item",
+      "target": "92d03f2efae94149",
+      "targetInput": "string"
+    },
+    {
+      "source": "92d03f2efae94149",
+      "sourceOutput": "string",
+      "target": "2d3b438fc52677be",
+      "targetInput": "sourceStr1"
+    },
+    {
+      "source": "236084fa2c5a85d7",
+      "sourceOutput": "triggerOut",
+      "target": "4278d5cab5cc27f0",
+      "targetInput": "run"
+    },
+    {
+      "source": "844bf44de6c2bfb8",
+      "sourceOutput": "out",
+      "target": "2cce95cb5bfee8d6",
+      "targetInput": "uri"
+    },
+    {
+      "source": "26b2f6ce0ef34f77",
+      "sourceOutput": "out",
+      "target": "2cce95cb5bfee8d6",
+      "targetInput": "table"
+    },
+    {
+      "source": "a718f4ead3fc299b",
+      "sourceOutput": "triggerOut",
+      "target": "70ddc4b8a3d8f28c",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "70ddc4b8a3d8f28c",
+      "sourceOutput": "triggerOut",
+      "target": "adc74396d10deab4",
+      "targetInput": "triggerIn"
+    }
+  ],
+  "zoom": 0.22196312646178606,
+  "areaX": 1854.1415756225558,
+  "areaY": 285.42188339233155,
+  "created": 1717863314322,
+  "execPersistence": "onChange"
+}

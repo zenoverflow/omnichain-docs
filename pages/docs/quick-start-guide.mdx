@@ -1,0 +1,69 @@
+First, make sure to follow the [Setup](/docs/setup) instructions to get the app up and running.
+
+## Concept
+
+OmniChain is a no-frills visual workflow builder centered around LLMs, focused on using them to process text, files, and images. A key difference with other LLM-centric workflow builders is that OmniChain lets you build your own prompting logic and your logic flows themselves from the ground up. So, you're going to see a lot of nodes that focus on building prompts and chat histories that feed into one or more LLMs via the LLM nodes. You're also going to see nodes focused on taking the output from an LLM to do some processing and decisions with regular logic, without making any calls to an LLM.
+
+You could say that OmniChain lets you augment one or more LLMs with your own logic and data processing, so if an LLM or a group of LLMs are the human-like brains of your workflow, reading text and doing tedious tasks with it, OmniChain is what turns them into cyborgs, using your own high-level logic and some basic data processing to help them make decisions, take actions, and stay on track. By orchestrating one or more LLMs along with your own logic like this, you can greatly optimise a workflow for a specific task or set of tasks.
+
+## Constructing workflows
+
+Before you get started, you should take a quick look at the short [Interface](/docs/interface) section in order to understand the basics of the OmniChain UI.
+
+Also, you can see detailed info about anything mentioned here in the [Chains](/docs/chains) and [Flow](/docs/flow) sections.
+
+To follow the explanation properly, import and open the [Basic Chatbot example chain](/examples/basic-chatbot), which is a barebones chatbot that uses a single LLM to directly respond to messages. This will give you a clean and simple starting point to understand how chains work.
+
+### Node connections
+
+You will notice that each connection between nodes has a specific color. The [Connections](/docs/chains#connections) info in the Chains section explains what each color means, but here is what you should focus on.
+
+First off, connection sockets on the left side of the node are inputs, and those on the right side are outputs.
+
+Second, red connections are special. They are called "triggers" and define what is known as the Control Flow. This is the path that the execution of the chain will take. When there is a red connection between two nodes, it means that the one of the nodes is using its outputs to pass execution control to the other node via the other node's inputs. This is how you define the order in which nodes are executed.
+
+Every other connection color carries only data. This is the Data Flow. You could say it flows in reverse when compared to the Control Flow. So, a node on the end of a data connection will pull data from one or more nodes before it. If you've used something like ComfyUI, you will already be familiar with the Data Flow concept.
+
+What you need to take away from this is that the Control Flow is the actual path that the chain will take, while the Data Flow is a secondary path for processing data. To understand what a chain does, you need to look at the Control Flow first and foremost, and then at the Data Flow as secondary details.
+
+### Control Flow
+
+Looking at the [Basic Chatbot example](/examples/basic-chatbot), you will see that the `Start` node, which is the entrypoint of the chain, triggers a node that checks for new messages, and when it detects a new message, it blocks the chat (via a `ChatBlock` node), triggers the `Response` node that does something to send a response, then uses another `ChatBlock` node to unblock the chat, and the next connection goes back into the `CheckForNextMessage` node which loops back into itself while there are no new messages. The "Polling interval" control on the `CheckForNextMessage` node defines how often the node performs the check and decides whether to fire its `yes` or `no` trigger. This is the main logic flow of the chain, hence the Control Flow.
+
+In this case, it represents a simple loop that waits for new messages and triggers a response when it detects one.
+
+### Data Flow
+
+The nodes connected into the `Response` node represent some Data Flow logic. When triggered, the `Response` node uses the connection of its `message` input to somehow get a message for the response.
+
+Since the chat message is a special data type in OmniChain, which contains more than just the text we get from an LLM, it needs to be constructed by the `BuildMessage` node, which is connected into the `Response` node.
+
+The `BuildMessage` node itself now needs to get the actual text to put into the message, so it uses the connection of its `content` input to get it from an LLM node.
+
+To generate the text, the LLM node needs to be prompted. The node used in this example is the `OllamaChatCompletion` node, which can receive one or more messages directly, and doesn't require you to build up a template for the prompt on your own.
+
+In this case we know the user has sent a message, and we want every run of this logic to send the entire chat history to the LLM, so connect the `ReadSessionMessages` node into the `OllamaChatCompletion` node's `messages` input. The `limit` control on the `ReadSessionMessages` node is set to `-1`, which means it will read all messages in the chat history and output them as an array of messages.
+
+To sum this part up, the `Response` node tells the `BuildMessage` node to build a message with the text generated by the `OllamaChatCompletion` node, which gets its chat history from the `ReadSessionMessages` node.
+
+## Workflow logic
+
+You can think of any workflow as a series of steps that need to be taken in order to achieve a goal. It's basically a program that optionally uses LLMs as flexible processing components that take instructions in natural language, only you're building it visually like you would with Scratch. As you can see in the example, the logic is built in a way that allows you to freely use trigger connections to define the order in which nodes are executed, and data connections to pass data around.
+
+There is no specific logical order in regards to building the chain. Execution of the Control Flow always begins at the Start node, but you're free to do whatever you like afterwards. You're also free to use whatever nodes you need in order to generate a given type of data like pure text, chat messages, files, etc. You literally just match the connection colors, and there is no real restriction on the order or nature of the nodes you should use to achieve a specific goal.
+
+### Build freely
+
+Since you're essentially building a program, you can have it do whatever you need. It doesn't have to be a chatbot. You don't even have to use an LLM or read/write messages to/from the chat. All of these features are there for you to use, but only if and when you want to.
+
+For example, you could have a chain that simply loops to monitor some process, does some complex data processing via an LLM and outputs useful concise messages to the chat when it detects some condition, without ever reading messages from the user.
+
+You could also read a user message and then send them more than one response, or use an LLM to scan messages and make a decision whether to ask the user for more information about something (look at [Branching](/docs/logic-branching)).
+
+You can have a chain that behaves somewhat like a human, doing something in the background and responding to messages only when it can be interrupted.
+
+You can even can build a workflow that just strings together a bunch of APIs and does something entirely different. The only limits are the platform features and your imagination, but since OmniChain also lets you use code written by you or generated by LLMs, as well as any external service that can be called via an http request, we can forego the humbleness for a bit and say that - just like with coding - the only limit is your imagination.
+
+## What now?
+
+Well... whatever. Make a new chain, open the [Nodes Index](/docs/interface#nodes-index), pick some relevant-looking nodes, put them on the canvas, and connect them to see what happens. Check any of the [Examples](/examples/basic-chatbot) for inspiration. Read through the other sections of the documentation for details on how things work. Maybe go on GitHub and open a new issue to point out how bad this documentation is. The world is a big place, I'm sure you'll find something meaningful to do, unlike the creator of this project.

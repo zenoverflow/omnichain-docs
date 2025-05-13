@@ -1,0 +1,21 @@
+Some nodes in OmniChain support overriding control values externally. You can tell by the `override` string input present on these nodes.
+
+![Screenshot - Control Overrides](/images/s_overrides.png)
+
+This input expects a JSON object (as a string). You can see the properties to use in the object by looking at the node's documentation, either in the node index or in the node's help popup.
+
+![Screenshot - Control Overrides Info](/images/s_overrides_info.png)
+
+Overrides are meant to allow customization of controls via an external source like output from an LLM. For example, if you were making a chain with some sort of self-correction behavior, you could have a LLM (or your own logic) automatically alter settings like `temperature` or `top_k` for an LLM node.
+
+Example screenshot:
+
+<a
+    target="_blank"
+    rel="noopener noreferrer"
+    href="/images/s_overrides_example.png"
+>
+    ![Screenshot - Control Overrides Example](/images/s_overrides_example.png)
+</a>
+
+In the screenshot above, the `temperature` and `top_k` values in the node's controls are being ignored in favor of those passed in via the `override` input. A TemplateBuilder node is used to insert the values into a JSON object to use as the override input.

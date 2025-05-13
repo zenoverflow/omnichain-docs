@@ -1,0 +1,29 @@
+import { DownloadExampleButton } from "../../components/DownloadExampleButton";
+
+## Call external HTTP APIs
+
+This barebones example shows you how to call an external HTTP API from within an OmniChain workflow.
+
+The chain is configured to take each user message and send it to an external API, which in this example is just a local OpenAI-compatible server (like text-generation-webui), and then parse the result to send a response back to the user.
+
+The example is just an illustration, so only the last message from the user is sent in each request. You can easily modify the chain to send the entire conversation history or any other data you need.
+
+![Screenshot](/examples/External_API.png)
+
+<DownloadExampleButton
+    title="Download"
+    fileUrl="/examples/External_API.json"
+    fileName="External_API.json"
+/>
+
+## Explanation
+
+When the chain runs, the CheckForNextMessage node waits for a new message from the user. When a message is detected, the BlockChat node is used to block the chat UI, and the Response node is triggered.
+
+To create the response message for the user, the last detected user message is inserted into a hardcoded JSON string via a TemplateBuilder node and the result is used by a MakeHttpRequest node to send a POST request to the API.
+
+The result is read by a ReadFromJSON node in order to extract the content of the message, which is then piped into the BuildMessage node used by the Response node.
+
+If some sort of error occurs here (like if the response does not contain content), the Response fires its 'on error' trigger to activate a different Response node, which sends a hardcoded error message to the user - this part is used to demonstrate how to handle internal errors in a chain.
+
+Finally, the BlockChat node is used to unblock the chat UI, and the CheckForNextMessage node is triggered to start waiting again.

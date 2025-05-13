@@ -1,0 +1,31 @@
+import { DownloadExampleButton } from "../../components/DownloadExampleButton";
+
+## Get started by building a barebones chatbot
+
+This is an example of a barebones chatbot that just waits for the user to say something, and then uses an LLM to generate and send a response.
+
+The purpose is to illustrate the very basics of a workflow with OmniChain.
+
+Note: Configured to use Ollama with the `llama3.1:8b-instruct-q8_0` model.
+
+<a target="_blank" rel="noopener noreferrer" href="/examples/Basic_Chatbot.png">
+    ![Screenshot](/examples/Basic_Chatbot.png)
+</a>
+
+<DownloadExampleButton
+    title="Download"
+    fileUrl="/examples/Basic_Chatbot.json"
+    fileName="Basic_Chatbot.json"
+/>
+
+## Explanation
+
+The Start node activates a CheckForNextMessage node which loops in on itself until it detects a new message.
+
+Once a message from the user is detected, a BlockChat node is used to block OmniChain's integrated chat UI and a Response node is triggered.
+
+The Response node requests a message to be built by a BuildMessage node, which uses an OllamaChatCompletion node to generate a response via an LLM hosted locally with Ollama.
+
+The Ollama node receives the message history using a ReadSessionMessages node with a limit set to -1, which means the entire history is read.
+
+Once the response is generated and sent to the user, another BlockChat node is used to unblock the chat UI and the CheckForNextMessage node is triggered to start waiting again.

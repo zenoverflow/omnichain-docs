@@ -1,0 +1,799 @@
+{
+  "name": "Safety_Censorship",
+  "graphId": "fda9cd6e-693b-451a-aeb1-7af7756b0814",
+  "nodes": [
+    {
+      "nodeType": "StartNode",
+      "nodeId": "33969f211a2285bf",
+      "controls": {},
+      "positionX": -1653.0982906938814,
+      "positionY": -1286.070628633077
+    },
+    {
+      "nodeType": "CheckForNextMessageNode",
+      "nodeId": "de280af6eb2fec25",
+      "controls": {
+        "waitTimeMs": 100
+      },
+      "positionX": -656.2564493089226,
+      "positionY": -1904.347576664995
+    },
+    {
+      "nodeType": "BlockChatNode",
+      "nodeId": "bb1f26edfbc72871",
+      "controls": {
+        "action": "block"
+      },
+      "positionX": -56.80400120329301,
+      "positionY": -1702.912579141685
+    },
+    {
+      "nodeType": "BlockChatNode",
+      "nodeId": "2f54c3e31e971db0",
+      "controls": {
+        "action": "unblock"
+      },
+      "positionX": -1716.2022244611485,
+      "positionY": -1607.4211694394535
+    },
+    {
+      "nodeType": "TextNode",
+      "nodeId": "a66eeb8e528176ed",
+      "controls": {
+        "val": "You are an assistant for a health clinic called \"HealthUP\".\nYou are chatting with a customer online.\nYour Assigned Topic is dieting, food, and food supplements.\nThe chat history with the customer is available within CHAT_HISTORY tags."
+      },
+      "positionX": -3513.0958609438712,
+      "positionY": -2615.355064466266
+    },
+    {
+      "nodeType": "TextNode",
+      "nodeId": "b08e3e0e1cc275d4",
+      "controls": {
+        "val": "Your current job is to scan the chat history and answer only with the word YES or NO."
+      },
+      "positionX": -253.8340854632661,
+      "positionY": -634.2336064915189
+    },
+    {
+      "nodeType": "RouteTriggerNode",
+      "nodeId": "b4726380e29458d4",
+      "controls": {},
+      "positionX": 3546.766226821416,
+      "positionY": 1102.573578488255
+    },
+    {
+      "nodeType": "TextNode",
+      "nodeId": "25a73bec8af650cd",
+      "controls": {
+        "val": "Your current job is to reply to the customer's last message.\nYou must answer the message while strictly staying on your Assigned Topic."
+      },
+      "positionX": 4376.252459173779,
+      "positionY": -583.7263694884597
+    },
+    {
+      "nodeType": "PortalInForStringNode",
+      "nodeId": "1a755e7497614ebf",
+      "controls": {
+        "portal": "M_SYS"
+      },
+      "positionX": -3372.630757376697,
+      "positionY": -2890.278413965319
+    },
+    {
+      "nodeType": "ControlModuleIONode",
+      "nodeId": "580e97f3e6616879",
+      "controls": {
+        "module": "M_RES",
+        "caller": "c9669eb8f32fe6d8"
+      },
+      "positionX": -3874.0484691405636,
+      "positionY": -1681.3362541509694
+    },
+    {
+      "nodeType": "ResponseNode",
+      "nodeId": "d5b617d837387219",
+      "controls": {},
+      "positionX": -3119.936044404554,
+      "positionY": -1686.1386374924375
+    },
+    {
+      "nodeType": "BuildMessageNode",
+      "nodeId": "87c475411c9a41e2",
+      "controls": {
+        "role": "assistant"
+      },
+      "positionX": -3131.2354751964813,
+      "positionY": -1366.5261665207634
+    },
+    {
+      "nodeType": "TextFieldNode",
+      "nodeId": "acf0cb586a9fd532",
+      "controls": {
+        "val": "Mr Diet"
+      },
+      "positionX": -3281.3564842892374,
+      "positionY": -954.9040448148194
+    },
+    {
+      "nodeType": "ControlModuleNode",
+      "nodeId": "f3110fab7ea16527",
+      "controls": {
+        "module": "M_RES"
+      },
+      "positionX": 2724.5478442116964,
+      "positionY": -846.4302844324739
+    },
+    {
+      "nodeType": "ControlModuleNode",
+      "nodeId": "c9669eb8f32fe6d8",
+      "controls": {
+        "module": "M_RES"
+      },
+      "positionX": 5217.394528477238,
+      "positionY": -2081.7617750405043
+    },
+    {
+      "nodeType": "TextJoinNode",
+      "nodeId": "bf199f1f2154c321",
+      "controls": {
+        "separator": "\\n"
+      },
+      "positionX": -221.52296794278263,
+      "positionY": 2601.4251507987824
+    },
+    {
+      "nodeType": "ReadSessionMessagesNode",
+      "nodeId": "6b1fb428158bd5b1",
+      "controls": {
+        "limit": 2
+      },
+      "positionX": -545.1161119887129,
+      "positionY": 4754.622070631989
+    },
+    {
+      "nodeType": "PortalOutForStringNode",
+      "nodeId": "f984ec3fdbf6b2db",
+      "controls": {
+        "portal": "M_SYS"
+      },
+      "positionX": -757.8818659144767,
+      "positionY": 2593.0903518136047
+    },
+    {
+      "nodeType": "DataModuleIONode",
+      "nodeId": "b87204dd60a7cc3b",
+      "controls": {
+        "module": "DM_DEC",
+        "caller": "bbab0c985404847f"
+      },
+      "positionX": -2366.7256036126705,
+      "positionY": 3003.2456007618835
+    },
+    {
+      "nodeType": "PickStringArrayItemNode",
+      "nodeId": "214b88954eef873d",
+      "controls": {
+        "index": 0
+      },
+      "positionX": -753.7178908324281,
+      "positionY": 2827.578350442132
+    },
+    {
+      "nodeType": "PickStringArrayItemNode",
+      "nodeId": "9310a90c0e23e233",
+      "controls": {
+        "index": 1
+      },
+      "positionX": -1172.3664793927683,
+      "positionY": 3553.7900005583147
+    },
+    {
+      "nodeType": "DataModuleNode",
+      "nodeId": "bbab0c985404847f",
+      "controls": {
+        "module": "DM_DEC"
+      },
+      "positionX": 732.1564136494453,
+      "positionY": -652.1810265493004
+    },
+    {
+      "nodeType": "ArrayFromStringNode",
+      "nodeId": "e60b4d8351ce328d",
+      "controls": {},
+      "positionX": 383.3834574336888,
+      "positionY": -430.68583500909426
+    },
+    {
+      "nodeType": "DoesTextContainNode",
+      "nodeId": "7f7a2a9ad53b706e",
+      "controls": {
+        "text": "YES"
+      },
+      "positionX": 1700.482558333054,
+      "positionY": -947.3058619604543
+    },
+    {
+      "nodeType": "MakeTextUppercaseNode",
+      "nodeId": "7e50db0ce3bc18a4",
+      "controls": {},
+      "positionX": 1309.7741869401657,
+      "positionY": -695.2894786152692
+    },
+    {
+      "nodeType": "DataModuleNode",
+      "nodeId": "c1c971d9f1f20a8c",
+      "controls": {
+        "module": "DM_GEN"
+      },
+      "positionX": 5164.2891104934315,
+      "positionY": -1204.9248702511295
+    },
+    {
+      "nodeType": "ArrayFromStringNode",
+      "nodeId": "6d0020b729ef0e77",
+      "controls": {},
+      "positionX": 5061.15358088959,
+      "positionY": -461.6356827969202
+    },
+    {
+      "nodeType": "ControlModuleNode",
+      "nodeId": "7567c054fb3b06ce",
+      "controls": {
+        "module": "M_RES"
+      },
+      "positionX": -1214.836911683832,
+      "positionY": -1394.8047261468346
+    },
+    {
+      "nodeType": "TextNode",
+      "nodeId": "06d99180f9e3840e",
+      "controls": {
+        "val": "Hello there! I'm Mr Diet, your virtual dietary assistant. How can I help you to stay healthy today?"
+      },
+      "positionX": -1306.9283597929289,
+      "positionY": -569.3795051536363
+    },
+    {
+      "nodeType": "OllamaTextCompletionNode",
+      "nodeId": "9ad863788b9633b5",
+      "controls": {
+        "model": "llama3.1:8b-instruct-q8_0",
+        "mirostat": "0",
+        "mirostatEta": 0.1,
+        "mirostatTau": 5,
+        "numCtx": 8192,
+        "repeatLastN": 0,
+        "repeatPenalty": 1,
+        "temperature": 0.8,
+        "seed": null,
+        "stop": null,
+        "tfsZ": 1,
+        "numPredict": 2,
+        "topK": 0,
+        "topP": 1,
+        "host": "http://localhost:11434",
+        "keepAlive": -1,
+        "json": "false",
+        "raw": "false"
+      },
+      "positionX": 218.68673245347463,
+      "positionY": 2579.993696948895
+    },
+    {
+      "nodeType": "TemplateBuilderNode",
+      "nodeId": "dad4f64e6b7bd072",
+      "controls": {
+        "val": "<CHAT_HISTORY>\n{history}\n</CHAT_HISTORY>\n\n{message}"
+      },
+      "positionX": -643.8475405236804,
+      "positionY": 3371.2634475085983
+    },
+    {
+      "nodeType": "SlotSimpleNode",
+      "nodeId": "5d6b11dd8f3035c9",
+      "controls": {
+        "slotName": "history"
+      },
+      "positionX": -526.2989954943764,
+      "positionY": 3981.024305098714
+    },
+    {
+      "nodeType": "SlotSimpleNode",
+      "nodeId": "84f332a2e0fffec1",
+      "controls": {
+        "slotName": "message"
+      },
+      "positionX": -1114.0548476154104,
+      "positionY": 3221.383760933128
+    },
+    {
+      "nodeType": "ChatMessageArrayToContextManualNode",
+      "nodeId": "3ed5d1b1042dbf69",
+      "controls": {
+        "userPrefix": "customer: ",
+        "assistantPrefix": "assistant: ",
+        "separator": "\\n\\n"
+      },
+      "positionX": -560.7892516430838,
+      "positionY": 4281.947323237422
+    },
+    {
+      "nodeType": "SessionClearNode",
+      "nodeId": "66cd3592a64102ee",
+      "controls": {},
+      "positionX": 2342.826722527571,
+      "positionY": -798.1703895086534
+    },
+    {
+      "nodeType": "TextNode",
+      "nodeId": "5f2b1bf19cafab33",
+      "controls": {
+        "val": "Please ask me about dieting, food, and food supplements."
+      },
+      "positionX": 1913.6958477761532,
+      "positionY": -177.98241290798848
+    },
+    {
+      "nodeType": "TextJoinNode",
+      "nodeId": "d6859f5f30334684",
+      "controls": {
+        "separator": "\\n"
+      },
+      "positionX": 5115.175630193768,
+      "positionY": 2635.259558654842
+    },
+    {
+      "nodeType": "ReadSessionMessagesNode",
+      "nodeId": "f4f0766b7a580300",
+      "controls": {
+        "limit": -1
+      },
+      "positionX": 4773.734763082197,
+      "positionY": 4777.891413798185
+    },
+    {
+      "nodeType": "PortalOutForStringNode",
+      "nodeId": "532bdad0e0dd7ae6",
+      "controls": {
+        "portal": "M_SYS"
+      },
+      "positionX": 4567.40970412908,
+      "positionY": 2637.0017650341133
+    },
+    {
+      "nodeType": "DataModuleIONode",
+      "nodeId": "d3dccd0b54ef11d2",
+      "controls": {
+        "module": "DM_GEN",
+        "caller": "c1c971d9f1f20a8c"
+      },
+      "positionX": 2958.565966430887,
+      "positionY": 3047.157013982391
+    },
+    {
+      "nodeType": "PickStringArrayItemNode",
+      "nodeId": "eb8d1fe6070a4c9f",
+      "controls": {
+        "index": 0
+      },
+      "positionX": 4571.573679211128,
+      "positionY": 2871.4897636626406
+    },
+    {
+      "nodeType": "PickStringArrayItemNode",
+      "nodeId": "9a365fb463d5522d",
+      "controls": {
+        "index": 1
+      },
+      "positionX": 4152.92509065079,
+      "positionY": 3597.7014137788215
+    },
+    {
+      "nodeType": "OllamaTextCompletionNode",
+      "nodeId": "b5a8c4d6b36047b2",
+      "controls": {
+        "model": "llama3.1:8b-instruct-q8_0",
+        "mirostat": "0",
+        "mirostatEta": 0.1,
+        "mirostatTau": 5,
+        "numCtx": 8192,
+        "repeatLastN": 0,
+        "repeatPenalty": 1,
+        "temperature": 0.8,
+        "seed": null,
+        "stop": null,
+        "tfsZ": 1,
+        "numPredict": -2,
+        "topK": 0,
+        "topP": 1,
+        "host": "http://localhost:11434",
+        "keepAlive": -1,
+        "json": "false",
+        "raw": "false"
+      },
+      "positionX": 5543.978302497029,
+      "positionY": 2623.905110169404
+    },
+    {
+      "nodeType": "TemplateBuilderNode",
+      "nodeId": "a52996aa5632ef58",
+      "controls": {
+        "val": "<CHAT_HISTORY>\n{history}\n</CHAT_HISTORY>\n\n{message}"
+      },
+      "positionX": 4681.444029519876,
+      "positionY": 3415.1748607291047
+    },
+    {
+      "nodeType": "SlotSimpleNode",
+      "nodeId": "7e93f1b125fe27b1",
+      "controls": {
+        "slotName": "history"
+      },
+      "positionX": 4798.99257454918,
+      "positionY": 4024.9357183192205
+    },
+    {
+      "nodeType": "SlotSimpleNode",
+      "nodeId": "ca6301f75d113d11",
+      "controls": {
+        "slotName": "message"
+      },
+      "positionX": 4211.236722428148,
+      "positionY": 3265.295174153635
+    },
+    {
+      "nodeType": "ChatMessageArrayToContextManualNode",
+      "nodeId": "6aad3b3fb27e3113",
+      "controls": {
+        "userPrefix": "customer: ",
+        "assistantPrefix": "assistant: ",
+        "separator": "\\n---\\n"
+      },
+      "positionX": 4764.502318400471,
+      "positionY": 4325.858736457925
+    },
+    {
+      "nodeType": "TextNode",
+      "nodeId": "6fbcca581c4f25ce",
+      "controls": {
+        "val": "Read the chat history and respond to the customer while strictly staying on your Assigned Topic."
+      },
+      "positionX": 4392.366855128461,
+      "positionY": -54.53050046827555
+    },
+    {
+      "nodeType": "TextNode",
+      "nodeId": "4200d03c7f6893ca",
+      "controls": {
+        "val": "Answer YES if the customer is asking you to diverge from your Assigned Topic. Otherwise answer NO.\nDivergence is characterized as anything not asking about dieting, food, or food supplements.\nIf the customer is answering one of your on-topic questions, that is fine, you can answer NO.\nIf the customer is asking something completely unrelated to the conversation about dieting, food, and food supplements, then answer YES.\nThink carefully before answering."
+      },
+      "positionX": -250.26636543445437,
+      "positionY": -115.50060631910034
+    }
+  ],
+  "connections": [
+    {
+      "source": "de280af6eb2fec25",
+      "sourceOutput": "noMsg",
+      "target": "de280af6eb2fec25",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "de280af6eb2fec25",
+      "sourceOutput": "haveMsg",
+      "target": "bb1f26edfbc72871",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "2f54c3e31e971db0",
+      "sourceOutput": "triggerOut",
+      "target": "de280af6eb2fec25",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "a66eeb8e528176ed",
+      "sourceOutput": "out",
+      "target": "1a755e7497614ebf",
+      "targetInput": "source"
+    },
+    {
+      "source": "580e97f3e6616879",
+      "sourceOutput": "triggerOut",
+      "target": "d5b617d837387219",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "acf0cb586a9fd532",
+      "sourceOutput": "out",
+      "target": "87c475411c9a41e2",
+      "targetInput": "avatarName"
+    },
+    {
+      "source": "87c475411c9a41e2",
+      "sourceOutput": "message",
+      "target": "d5b617d837387219",
+      "targetInput": "message"
+    },
+    {
+      "source": "d5b617d837387219",
+      "sourceOutput": "triggerOut",
+      "target": "580e97f3e6616879",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "580e97f3e6616879",
+      "sourceOutput": "string",
+      "target": "87c475411c9a41e2",
+      "targetInput": "content"
+    },
+    {
+      "source": "f984ec3fdbf6b2db",
+      "sourceOutput": "out",
+      "target": "bf199f1f2154c321",
+      "targetInput": "textSingle"
+    },
+    {
+      "source": "b87204dd60a7cc3b",
+      "sourceOutput": "stringArray",
+      "target": "214b88954eef873d",
+      "targetInput": "array"
+    },
+    {
+      "source": "b87204dd60a7cc3b",
+      "sourceOutput": "stringArray",
+      "target": "9310a90c0e23e233",
+      "targetInput": "array"
+    },
+    {
+      "source": "214b88954eef873d",
+      "sourceOutput": "string",
+      "target": "bf199f1f2154c321",
+      "targetInput": "textSingle2"
+    },
+    {
+      "source": "b08e3e0e1cc275d4",
+      "sourceOutput": "out",
+      "target": "e60b4d8351ce328d",
+      "targetInput": "sourceStr1"
+    },
+    {
+      "source": "e60b4d8351ce328d",
+      "sourceOutput": "outArr",
+      "target": "bbab0c985404847f",
+      "targetInput": "stringArray"
+    },
+    {
+      "source": "bb1f26edfbc72871",
+      "sourceOutput": "triggerOut",
+      "target": "7f7a2a9ad53b706e",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "b4726380e29458d4",
+      "sourceOutput": "out",
+      "target": "2f54c3e31e971db0",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "bbab0c985404847f",
+      "sourceOutput": "string",
+      "target": "7e50db0ce3bc18a4",
+      "targetInput": "text"
+    },
+    {
+      "source": "7e50db0ce3bc18a4",
+      "sourceOutput": "result",
+      "target": "7f7a2a9ad53b706e",
+      "targetInput": "dataIn"
+    },
+    {
+      "source": "c1c971d9f1f20a8c",
+      "sourceOutput": "string",
+      "target": "c9669eb8f32fe6d8",
+      "targetInput": "string"
+    },
+    {
+      "source": "25a73bec8af650cd",
+      "sourceOutput": "out",
+      "target": "6d0020b729ef0e77",
+      "targetInput": "sourceStr1"
+    },
+    {
+      "source": "6d0020b729ef0e77",
+      "sourceOutput": "outArr",
+      "target": "c1c971d9f1f20a8c",
+      "targetInput": "stringArray"
+    },
+    {
+      "source": "c9669eb8f32fe6d8",
+      "sourceOutput": "triggerOut",
+      "target": "2f54c3e31e971db0",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "06d99180f9e3840e",
+      "sourceOutput": "out",
+      "target": "7567c054fb3b06ce",
+      "targetInput": "string"
+    },
+    {
+      "source": "33969f211a2285bf",
+      "sourceOutput": "triggerOut",
+      "target": "7567c054fb3b06ce",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "7567c054fb3b06ce",
+      "sourceOutput": "triggerOut",
+      "target": "de280af6eb2fec25",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "7f7a2a9ad53b706e",
+      "sourceOutput": "fail",
+      "target": "c9669eb8f32fe6d8",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "5d6b11dd8f3035c9",
+      "sourceOutput": "slot",
+      "target": "dad4f64e6b7bd072",
+      "targetInput": "parts"
+    },
+    {
+      "source": "9310a90c0e23e233",
+      "sourceOutput": "string",
+      "target": "84f332a2e0fffec1",
+      "targetInput": "value"
+    },
+    {
+      "source": "bf199f1f2154c321",
+      "sourceOutput": "result",
+      "target": "9ad863788b9633b5",
+      "targetInput": "system"
+    },
+    {
+      "source": "84f332a2e0fffec1",
+      "sourceOutput": "slot",
+      "target": "dad4f64e6b7bd072",
+      "targetInput": "parts"
+    },
+    {
+      "source": "9ad863788b9633b5",
+      "sourceOutput": "result",
+      "target": "b87204dd60a7cc3b",
+      "targetInput": "string"
+    },
+    {
+      "source": "dad4f64e6b7bd072",
+      "sourceOutput": "result",
+      "target": "9ad863788b9633b5",
+      "targetInput": "prompt"
+    },
+    {
+      "source": "3ed5d1b1042dbf69",
+      "sourceOutput": "result",
+      "target": "5d6b11dd8f3035c9",
+      "targetInput": "value"
+    },
+    {
+      "source": "6b1fb428158bd5b1",
+      "sourceOutput": "messages",
+      "target": "3ed5d1b1042dbf69",
+      "targetInput": "messages"
+    },
+    {
+      "source": "5f2b1bf19cafab33",
+      "sourceOutput": "out",
+      "target": "f3110fab7ea16527",
+      "targetInput": "string"
+    },
+    {
+      "source": "7f7a2a9ad53b706e",
+      "sourceOutput": "pass",
+      "target": "66cd3592a64102ee",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "66cd3592a64102ee",
+      "sourceOutput": "triggerOut",
+      "target": "f3110fab7ea16527",
+      "targetInput": "triggerIn"
+    },
+    {
+      "source": "f3110fab7ea16527",
+      "sourceOutput": "triggerOut",
+      "target": "b4726380e29458d4",
+      "targetInput": "in"
+    },
+    {
+      "source": "532bdad0e0dd7ae6",
+      "sourceOutput": "out",
+      "target": "d6859f5f30334684",
+      "targetInput": "textSingle"
+    },
+    {
+      "source": "d3dccd0b54ef11d2",
+      "sourceOutput": "stringArray",
+      "target": "eb8d1fe6070a4c9f",
+      "targetInput": "array"
+    },
+    {
+      "source": "d3dccd0b54ef11d2",
+      "sourceOutput": "stringArray",
+      "target": "9a365fb463d5522d",
+      "targetInput": "array"
+    },
+    {
+      "source": "eb8d1fe6070a4c9f",
+      "sourceOutput": "string",
+      "target": "d6859f5f30334684",
+      "targetInput": "textSingle2"
+    },
+    {
+      "source": "7e93f1b125fe27b1",
+      "sourceOutput": "slot",
+      "target": "a52996aa5632ef58",
+      "targetInput": "parts"
+    },
+    {
+      "source": "9a365fb463d5522d",
+      "sourceOutput": "string",
+      "target": "ca6301f75d113d11",
+      "targetInput": "value"
+    },
+    {
+      "source": "d6859f5f30334684",
+      "sourceOutput": "result",
+      "target": "b5a8c4d6b36047b2",
+      "targetInput": "system"
+    },
+    {
+      "source": "ca6301f75d113d11",
+      "sourceOutput": "slot",
+      "target": "a52996aa5632ef58",
+      "targetInput": "parts"
+    },
+    {
+      "source": "b5a8c4d6b36047b2",
+      "sourceOutput": "result",
+      "target": "d3dccd0b54ef11d2",
+      "targetInput": "string"
+    },
+    {
+      "source": "a52996aa5632ef58",
+      "sourceOutput": "result",
+      "target": "b5a8c4d6b36047b2",
+      "targetInput": "prompt"
+    },
+    {
+      "source": "6aad3b3fb27e3113",
+      "sourceOutput": "result",
+      "target": "7e93f1b125fe27b1",
+      "targetInput": "value"
+    },
+    {
+      "source": "f4f0766b7a580300",
+      "sourceOutput": "messages",
+      "target": "6aad3b3fb27e3113",
+      "targetInput": "messages"
+    },
+    {
+      "source": "6fbcca581c4f25ce",
+      "sourceOutput": "out",
+      "target": "6d0020b729ef0e77",
+      "targetInput": "sourceStr2"
+    },
+    {
+      "source": "4200d03c7f6893ca",
+      "sourceOutput": "out",
+      "target": "e60b4d8351ce328d",
+      "targetInput": "sourceStr2"
+    }
+  ],
+  "zoom": 0.14097267110060377,
+  "areaX": 778.8317459106497,
+  "areaY": 455.17798728942927,
+  "created": 1718041279026,
+  "execPersistence": "onChange"
+}
